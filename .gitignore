@@ -1,0 +1,9 @@
+# Ignore Mac files
+.DS_Store
+
+# Ignore Intellij files
+.idea/
+WebtoonCrawler.iml
+
+# Ignore compiled class files
+*.class
