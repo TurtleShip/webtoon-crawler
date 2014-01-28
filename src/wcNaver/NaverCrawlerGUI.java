@@ -21,6 +21,7 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JPanel myFacePanel; // TODO: When I am ready, post my handsome face.
     private JPanel selectionPanel;
     private JPanel wtListPanel;
+    private JScrollPane wtListScrollPane;
     private JPanel progressPanel;
 
     private JLabel mainLabel;
@@ -98,18 +99,29 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         // Create a webtoon list panel.
         wtListPanel = new JPanel();
-        wtListPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        wtListPanel.setPreferredSize(new Dimension(620, 500));
-        wtListPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+//        wtListPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+        wtListPanel.setLayout(new BoxLayout(wtListPanel, BoxLayout.Y_AXIS));
+
+        wtListPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+
+        wtListScrollPane = new JScrollPane();
+        wtListScrollPane.setPreferredSize(new Dimension(620, 500));
+        wtListScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
 
         // Create components for the webtoon list panel.
         wtListLabel = new JLabel("엡툰 목록은 여기에 다운로드~!");
         wtListPanel.add(wtListLabel);
+        wtListScrollPane.getViewport().setView(wtListPanel);
+//        wtListPanel.add(wtListLabel);
+
+//        wtListPane.add(wtListLabel);
+//        wtListPane = new JScrollPane(wtListPanel);
 
         // Add the selectionPanel to the main frame.
         jfrm.add(selectionPanel);
         jfrm.add(progressPanel);
-        jfrm.add(wtListPanel);
+//        jfrm.add(wtListPanel);
+        jfrm.add(wtListScrollPane);
 
         // Set up buttons
         setupGetListBtn();
@@ -165,14 +177,17 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         // Now display the information
         for (NaverWebtoonInfo info : infos) {
-            System.out.println(info.getTitleName());
             JLabel curLabel = new JLabel(info.getTitleName(), info.getThumb(),
                     SwingConstants.LEFT);
-
+            curLabel.setVerticalTextPosition(SwingConstants.TOP);
+            curLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             wtListPanel.add(curLabel);
+//            wtListPane.add(curLabel);
         }
 
         wtListPanel.revalidate();
+        wtListPanel.repaint();
+//        wtListPane.revalidate();
     }
 
     public void getBestChallengeList() {
