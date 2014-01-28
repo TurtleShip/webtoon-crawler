@@ -42,7 +42,7 @@ public class NaverWebtoonCrawler {
         Elements imgList;
         int webtoonTotal; // total number of webtoons for this day
         Matcher mat;
-
+        pw.println("Getting " + day);
         // Try connect to url.
         try {
             url = NaverWebtoonURL.getDayListURL(day);
@@ -58,7 +58,7 @@ public class NaverWebtoonCrawler {
         imgList = content.getElementsByClass("img_list").first().children();
         webtoonTotal = imgList.size();
 
-        pw.format("Total of %d cartoons\n", webtoonTotal);
+//        pw.format("Total of %d cartoons\n", webtoonTotal);
         info = new NaverWebtoonInfo[webtoonTotal];
 
 
@@ -74,14 +74,29 @@ public class NaverWebtoonCrawler {
             info[i] = new NaverWebtoonInfo(mat.group(1), link.attr("title"));
 
             // TODO: Replace below with log
-            pw.format("link = %s\n", href);
-            pw.format("title = %s\n", link.attr("title"));
-            pw.format("titleId = %s\n", mat.group(1));
-            pw.format("\n");
+//            pw.format("link = %s\n", href);
+//            pw.format("title = %s\n", link.attr("title"));
+//            pw.format("titleId = %s\n", mat.group(1));
+//            pw.format("\n");
         }
-        pw.format("\n");
+//        pw.format("\n");
         return info;
     }
+
+    public static void downloadThumb(NaverWebtoonInfo info) {
+        String wtListURL; // The url thats list all available webtoon series
+        Element wtList;
+
+        // Figure out the number of total series
+        wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());
+        try {
+            wtList = Jsoup.connect(wtListURL).get();
+        } catch (IOException e) {
+            pw.format("Unable to connect to %s\n", wtListURL);
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Download all images for this webtoon.
@@ -92,7 +107,7 @@ public class NaverWebtoonCrawler {
     public static boolean downloadWebtoon(NaverWebtoonInfo info) {
 
 
-        String wtListURL; // The url that list all available webtoon series
+        String wtListURL; // The url that lists all available webtoon series
         String wtURL, imgURL, wtSeriesName, wtSeriesFolderName, wtImgName;
         String wtFileName;
         Element wtList, wtPage, wtViewer;
