@@ -9,15 +9,16 @@ import java.util.regex.Pattern;
  */
 public class NaverWebtoonURL {
 
-    public static final String WEBTOON_BASE
-            = String.format("%s/webtoon", NaverURL.BASE_URL);
+    public static final String WEBTOON_BASE = NaverURL.BASE_URL + "/webtoon";
+
     public static final String WEBTOON_LIST_BASE
-            = String.format("%s/list.nhn?titleId=", WEBTOON_BASE);
+            = WEBTOON_BASE + "/list.nhn?titleId=";
+
     public static final String WEBTOON_DETAIL_BASE
-            = String.format("%s/detail.nhn?", WEBTOON_BASE);
+            = WEBTOON_BASE + "%s/detail.nhn?";
 
     private static final String WEBTOON_WEEKDAY_BASE
-            = String.format("%s/weekdayList.nhn?week=", WEBTOON_BASE);
+            = WEBTOON_BASE + "/weekdayList.nhn?week=";
 
     /* titleIdPat is used to pull titieId from a href links.
      ex> It is used to pull titleId from
@@ -28,15 +29,14 @@ public class NaverWebtoonURL {
 
 
     public static String getDayListURL(final Day day) {
-        return String.format("%s%s", WEBTOON_WEEKDAY_BASE, day.getDay());
+        return WEBTOON_WEEKDAY_BASE + day.getDay();
     }
 
     public static String getWebtoonListURL(final String titleId) {
-        return String.format("%s%s", WEBTOON_LIST_BASE, titleId);
+        return WEBTOON_LIST_BASE + titleId;
     }
 
     public static String getWebtoonDetailURL(final String titleId, final int num) {
-        return String.format("%stitleId=%s&no=%d", WEBTOON_DETAIL_BASE, titleId, num);
+        return WEBTOON_LIST_BASE + "titleId=" + titleId + "&no=" + num;
     }
-
 }
