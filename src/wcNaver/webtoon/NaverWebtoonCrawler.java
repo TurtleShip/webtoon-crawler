@@ -2,6 +2,7 @@ package wcNaver.webtoon;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.jsoup.Connection.Response;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.swing.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,13 +44,13 @@ public class NaverWebtoonCrawler {
         Elements imgList;
         int webtoonTotal; // total number of webtoons for this day
         Matcher mat;
-        pw.println("Getting " + day);
+
         // Try connect to url.
         try {
             url = NaverWebtoonURL.getDayListURL(day);
             doc = Jsoup.connect(url).get();
         } catch (IOException e) {
-            pw.format("Unable to connect to %s\n", url);
+            pw.println("Unable to connect to " + url);
             e.printStackTrace();
             return null;
         }
@@ -68,10 +70,17 @@ public class NaverWebtoonCrawler {
                     .getElementsByTag("a").first();
             href = link.attr("href");
 
+            String thumbURL = link.child(0).absUrl("src");
             // Use Regex to pull title id from the href link
             mat = NaverWebtoonURL.titleIdPat.matcher(href);
             mat.find();
-            info[i] = new NaverWebtoonInfo(mat.group(1), link.attr("title"));
+            try {
+                info[i] = new NaverWebtoonInfo(mat.group(1), link.attr("title"),
+                        new ImageIcon(new URL(thumbURL)));
+            } catch (MalformedURLException e) {
+                pw.println("Unable to download thumbnail from url " + thumbURL);
+                e.printStackTrace();
+            }
 
             // TODO: Replace below with log
 //            pw.format("link = %s\n", href);
@@ -82,21 +91,6 @@ public class NaverWebtoonCrawler {
 //        pw.format("\n");
         return info;
     }
-
-    public static void downloadThumb(NaverWebtoonInfo info) {
-        String wtListURL; // The url thats list all available webtoon series
-        Element wtList;
-
-        // Figure out the number of total series
-        wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());
-        try {
-            wtList = Jsoup.connect(wtListURL).get();
-        } catch (IOException e) {
-            pw.format("Unable to connect to %s\n", wtListURL);
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * Download all images for this webtoon.
@@ -124,7 +118,7 @@ public class NaverWebtoonCrawler {
         try {
             wtList = Jsoup.connect(wtListURL).get();
         } catch (IOException e) {
-            pw.format("Unable to connect to %s\n", wtListURL);
+            pw.println("Unable to connect to " + wtListURL);
             e.printStackTrace();
             return false;
         }
@@ -158,7 +152,7 @@ public class NaverWebtoonCrawler {
                 wtSeriesName = wtPage.getElementsByClass("tit_area").first()
                         .getElementsByClass("view").first()
                         .getElementsByTag("h3").first().ownText();
-                pw.format("Title : %s\n", wtSeriesName);
+
 //                wtSeriesFolderName = String.format("%d_%s", curSeries, wtSeriesName);
                 wtSeriesFolderName = wtSeriesName;
                 wtSeriesDir = wtDir.resolve(wtSeriesFolderName);
@@ -179,16 +173,15 @@ public class NaverWebtoonCrawler {
                     // Check that imgURL is actually an image file
                     if (imgURL == null || !imgURL.endsWith(".jpg")) continue;
 
-                    pw.format("downloading %s\n", imgURL);
+                    pw.println("downloading " + imgURL);
                     wtRes = Jsoup.connect(imgURL).referrer(wtURL)
                             .ignoreContentType(true).execute();
-                    wtFileName = String.format("Image_%d.jpg", wtCount++);
+                    wtFileName = "Image_" + (wtCount++) + ".jpg";
                     wtOut = new FileOutputStream(wtSeriesDir.resolve(wtFileName).toFile());
 
                     // save it!
                     wtOut.write(wtRes.bodyAsBytes());
                     wtOut.close();
-
                 }
 
                 // download all images within images

@@ -166,7 +166,9 @@ public class NaverCrawlerGUI implements NaverConstants {
         // Now display the information
         for (NaverWebtoonInfo info : infos) {
             System.out.println(info.getTitleName());
-            JLabel curLabel = new JLabel(info.getTitleName());
+            JLabel curLabel = new JLabel(info.getTitleName(), info.getThumb(),
+                    SwingConstants.LEFT);
+
             wtListPanel.add(curLabel);
         }
 
