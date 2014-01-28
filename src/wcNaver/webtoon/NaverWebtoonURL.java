@@ -37,6 +37,6 @@ public class NaverWebtoonURL {
     }
 
     public static String getWebtoonDetailURL(final String titleId, final int num) {
-        return WEBTOON_LIST_BASE + "titleId=" + titleId + "&no=" + num;
+        return WEBTOON_DETAIL_BASE + "titleId=" + titleId + "&no=" + num;
     }
 }
