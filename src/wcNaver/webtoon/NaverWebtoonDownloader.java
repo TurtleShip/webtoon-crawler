@@ -57,6 +57,10 @@ public class NaverWebtoonDownloader implements Runnable {
         notify();
     }
 
+    public synchronized boolean isPaused() {
+        return pause;
+    }
+
     public synchronized void start() {
         thread.start();
     }

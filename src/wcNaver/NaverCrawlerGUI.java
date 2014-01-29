@@ -104,7 +104,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         progressPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         // Create components for the progress panel.
-        progressLabel = new JLabel("나는야 프로그래스 레이블");
+//        progressLabel = new JLabel("나는야 프로그래스 레이블");
 
         saveDirChsr = new JFileChooser();
         saveDirChsr.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -125,7 +125,7 @@ public class NaverCrawlerGUI implements NaverConstants {
             }
         });
 
-        progressPanel.add(progressLabel);
+//        progressPanel.add(progressLabel);
         progressPanel.add(chseDirBtn);
         progressPanel.add(saveDirMsgLabel);
         progressPanel.add(saveDirLabel);
@@ -200,7 +200,6 @@ public class NaverCrawlerGUI implements NaverConstants {
         NaverWebtoonInfo[] infos
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
-
         // Now display the information
         for (final NaverWebtoonInfo info : infos) {
             // A panel to hold a webtoon info
@@ -216,12 +215,14 @@ public class NaverCrawlerGUI implements NaverConstants {
 
 
             // Create a button to download and a button to cancel
-            final JButton wtDownload = new JButton("웹툰 다운로드");
-            final JButton wtCancel = new JButton("다운로드 취소");
-            final JLabel wtMsgLabel = new JLabel();
+            JButton wtDownload = new JButton("웹툰 다운로드");
+            JButton wtPause = new JButton("일시정지");
+            JButton wtCancel = new JButton("다운로드 취소");
+            JLabel wtMsgLabel = new JLabel();
+
 
             // Create a progress bar for the total progress
-            // and another bar for the partial progress
+            // and another progress bar for the partial progress
             totalProg = new JProgressBar();
             partialProg = new JProgressBar();
 
@@ -229,48 +230,29 @@ public class NaverCrawlerGUI implements NaverConstants {
             totalProg.setStringPainted(true);
             partialProg.setStringPainted(true);
 
-            final NaverWebtoonDownloader downloader
-                    = new NaverWebtoonDownloader(info, totalProg, partialProg);
-
+            // Set the button settings
+            wtDownload.setEnabled(true);
+            wtPause.setEnabled(false);
             wtCancel.setEnabled(false);
 
-            // Add functionality to the buttons
-            wtDownload.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
+            // Set the button commands
+            wtDownload.setActionCommand("download");
+            wtPause.setActionCommand("pause");
+            wtCancel.setActionCommand("cancel");
 
-                    // Grab a path to save folders
-                    if (saveDirLabel.getText() == "") {
-                        wtMsgLabel.setText("저장 경로를 선택하세요!");
-                        return;
-                    }
-
-                    downloader.setSaveDir(Paths.get(saveDirLabel.getText()));
-
-                    // Adjust buttons accordingly
-                    wtDownload.setEnabled(false);
-                    wtCancel.setEnabled(true);
-
-                    wtMsgLabel.setText("저장 위치: " + saveDirLabel.getText());
-
-                    // Start the download
-                    downloader.start();
-                }
-            });
-
-            wtCancel.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                    wtDownload.setEnabled(true);
-                    wtCancel.setEnabled(false);
-                    downloader.shutdown();
-                }
-            });
-
+            // Instantiate a NaverDownloadBtnLister, and link to
+            // download-related buttons
+            NaverDownloadBtnListener downloadListener
+                    = new NaverDownloadBtnListener(
+                    info, totalProg, partialProg, saveDirLabel,
+                    wtMsgLabel, wtDownload, wtCancel, wtPause);
+            wtDownload.addActionListener(downloadListener);
+            wtPause.addActionListener(downloadListener);
+            wtCancel.addActionListener(downloadListener);
 
             curWtPanel.add(curLabel);
             curWtPanel.add(wtDownload);
+            curWtPanel.add(wtPause);
             curWtPanel.add(wtCancel);
             curWtPanel.add(wtMsgLabel);
             curWtPanel.add(totalProg);
