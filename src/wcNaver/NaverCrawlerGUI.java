@@ -23,16 +23,23 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JPanel wtListPanel;
     private JScrollPane wtListScrollPane;
     private JPanel progressPanel;
+    private JPanel wtPanel;
 
     private JLabel mainLabel;
     private JLabel subLabel;
     private JLabel progressLabel;
     private JLabel wtListLabel;
+    private JLabel wtLabel;
 
     private JList mainSelectorList;
     private JList subSelectorList;
 
     private JButton getListBtn;
+//    private JButton wtDownload;
+//    private JButton wtCancel;
+
+    private JProgressBar totalProg;
+    private JProgressBar partialProg;
 
     public NaverCrawlerGUI() {
 
@@ -148,8 +155,6 @@ public class NaverCrawlerGUI implements NaverConstants {
                 // Clear list panel
                 wtListPanel.removeAll();
 
-                System.out.println("Clear!");
-
                 switch (mainCat) {
                     case "webtoon":
                         getWebtoonList(subCat);
@@ -176,13 +181,65 @@ public class NaverCrawlerGUI implements NaverConstants {
 
 
         // Now display the information
-        for (NaverWebtoonInfo info : infos) {
+        for (final NaverWebtoonInfo info : infos) {
+            // A panel to hold a webtoon info
+            JPanel curWtPanel = new JPanel();
+            curWtPanel.setLayout(new FlowLayout());
+            curWtPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+            // Create a thumbnail with its title
             JLabel curLabel = new JLabel(info.getTitleName(), info.getThumb(),
                     SwingConstants.LEFT);
             curLabel.setVerticalTextPosition(SwingConstants.TOP);
-            curLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-            wtListPanel.add(curLabel);
-//            wtListPane.add(curLabel);
+            curLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+
+
+            // Create a button to download and a button to cancel
+            final JButton wtDownload = new JButton("웹툰 다운로드");
+            final JButton wtCancel = new JButton("다운로드 취소");
+            wtCancel.setEnabled(false);
+
+            // Add functionality to the buttons
+            wtDownload.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    // Adjust buttons accordingly
+                    wtDownload.setEnabled(false);
+                    wtCancel.setEnabled(true);
+
+                    // Grab a path to save folders
+
+                    // Start the download
+                    NaverWebtoonCrawler.downloadWebtoon(info);
+                }
+            });
+
+            wtCancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    wtDownload.setEnabled(true);
+                    wtCancel.setEnabled(false);
+                }
+            });
+
+            // Create a progress bar for the total progress
+            // and another bar for the partial progress
+            totalProg = new JProgressBar();
+            partialProg = new JProgressBar();
+
+
+
+
+
+
+
+            curWtPanel.add(curLabel);
+            curWtPanel.add(wtDownload);
+            curWtPanel.add(wtCancel);
+
+            wtListPanel.add(curWtPanel);
+//            wtListPanel.add(curLabel);
+
         }
 
         wtListPanel.revalidate();
@@ -197,4 +254,6 @@ public class NaverCrawlerGUI implements NaverConstants {
     public void getChallengeList() {
 
     }
+
+
 }

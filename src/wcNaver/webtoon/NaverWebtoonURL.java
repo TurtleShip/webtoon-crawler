@@ -15,7 +15,7 @@ public class NaverWebtoonURL {
             = WEBTOON_BASE + "/list.nhn?titleId=";
 
     public static final String WEBTOON_DETAIL_BASE
-            = WEBTOON_BASE + "%s/detail.nhn?";
+            = WEBTOON_BASE + "/detail.nhn?";
 
     private static final String WEBTOON_WEEKDAY_BASE
             = WEBTOON_BASE + "/weekdayList.nhn?week=";
