@@ -16,16 +16,6 @@ import javax.swing.*;
 public class NaverCrawler {
 
     public static void main(String[] args) throws Exception {
-//        NaverWebtoonInfo[] infos = null;
-
-//        for(Day day : Day.values())
-//            infos = NaverWebtoonCrawler.downloadWebtoonList(day);
-//        infos = NaverWebtoonCrawler.downloadWebtoonListByDay(Day.MON);
-
-//        NaverWebtoonCrawler.downloadWebtoon(infos[0]);
-//        NaverWebtoonInfo info = new NaverWebtoonInfo("460689", "기타맨");
-//        NaverWebtoonCrawler.downloadWebtoon(info);
-
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

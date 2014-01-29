@@ -19,20 +19,18 @@ import java.nio.file.Paths;
  */
 public class NaverCrawlerGUI implements NaverConstants {
 
-    private JPanel myFacePanel; // TODO: When I am ready, post my handsome face.
     private JPanel selectionPanel;
     private JPanel wtListPanel;
-    private JPanel progressPanel;
-    private JPanel wtPanel;
+    private JPanel myProfilePanel;
+    private JPanel saveDirPanel;
 
     private JScrollPane wtListScrollPane;
     private JScrollPane selSubScrollPane;
+    private JScrollPane savePathScrollPane;
 
     private JLabel mainLabel;
     private JLabel subLabel;
-    private JLabel progressLabel;
     private JLabel wtListLabel;
-    private JLabel wtLabel;
     private JLabel saveDirMsgLabel;
     private JLabel saveDirLabel;
 
@@ -55,7 +53,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         JFrame jfrm = new JFrame("네이버 크롤러");
         jfrm.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        jfrm.setSize(625, 720);
+        jfrm.setSize(625, 760);
         jfrm.setResizable(false); // Make it not resizable for now.
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -65,7 +63,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         // Add the selectionPanel to the main frame.
         jfrm.add(selectionPanel);
-        jfrm.add(progressPanel);
+        jfrm.add(myProfilePanel);
         jfrm.add(wtListScrollPane);
 
         jfrm.setVisible(true);
@@ -76,7 +74,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         selectionPanel = new JPanel();
         selectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
         selectionPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        selectionPanel.setPreferredSize(new Dimension(310, 180));
+        selectionPanel.setPreferredSize(new Dimension(310, 220));
 
         // Create the main selector with a label
         mainLabel = new JLabel("메인 카테고리");
@@ -105,34 +103,26 @@ public class NaverCrawlerGUI implements NaverConstants {
         getListBtn = new JButton("웹툰 목록 가져오기~");
         getListBtn.setPreferredSize(new Dimension(150, 20));
 
-        // add them all to the selectionPanel panel.
-        selectionPanel.add(mainLabel);
-        selectionPanel.add(subLabel);
-        selectionPanel.add(mainSelectorList);
-        selectionPanel.add(selSubScrollPane);
-//        selectionPanel.add(subSelectorList);
-        selectionPanel.add(getListBtn);
-    }
-
-    private void setupProgressPanel() {
-        // Create a progress panel.
-        progressPanel = new JPanel();
-        progressPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        progressPanel.setPreferredSize(new Dimension(310, 180));
-        progressPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-
-        // Create components for the progress panel.
         saveDirChsr = new JFileChooser();
         saveDirChsr.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         saveDirMsgLabel = new JLabel("저장 경로를 선택하세요~!");
         saveDirLabel = new JLabel("");
 
+        saveDirPanel = new JPanel();
+        saveDirPanel.add(saveDirMsgLabel);
+        saveDirPanel.add(saveDirLabel);
+
+        savePathScrollPane = new JScrollPane();
+        savePathScrollPane.setPreferredSize(new Dimension(300, 40));
+        savePathScrollPane.getViewport().setView(saveDirPanel);
+
         chseDirBtn = new JButton("저장 경로 선택");
+        chseDirBtn.setPreferredSize(new Dimension(120, 20));
         chseDirBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (saveDirChsr.showOpenDialog(progressPanel)
+                if (saveDirChsr.showOpenDialog(selectionPanel)
                         == JFileChooser.APPROVE_OPTION) {
                     saveDirMsgLabel.setText("저장경로 : ");
                     saveDirLabel.setText(
@@ -141,9 +131,22 @@ public class NaverCrawlerGUI implements NaverConstants {
             }
         });
 
-        progressPanel.add(chseDirBtn);
-        progressPanel.add(saveDirMsgLabel);
-        progressPanel.add(saveDirLabel);
+        // add them all to the selectionPanel panel.
+        selectionPanel.add(mainLabel);
+        selectionPanel.add(subLabel);
+        selectionPanel.add(mainSelectorList);
+        selectionPanel.add(selSubScrollPane);
+        selectionPanel.add(chseDirBtn);
+        selectionPanel.add(getListBtn);
+        selectionPanel.add(savePathScrollPane);
+    }
+
+    private void setupProgressPanel() {
+        // Create a progress panel.
+        myProfilePanel = new JPanel();
+        myProfilePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+        myProfilePanel.setPreferredSize(new Dimension(310, 220));
+        myProfilePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 
     private void setupWtListScrollPane() {

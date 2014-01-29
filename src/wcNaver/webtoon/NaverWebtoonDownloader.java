@@ -41,7 +41,6 @@ public class NaverWebtoonDownloader implements Runnable {
     }
 
     public synchronized void shutdown() {
-        pw.println("Shutdown!");
         shutdown = true;
         pause = false;
         notify();
@@ -66,7 +65,6 @@ public class NaverWebtoonDownloader implements Runnable {
 
     @Override
     public void run() {
-        pw.println("downloading beings!");
         String wtListURL; // The url that lists all available webtoon series
         String wtURL, imgURL, wtSeriesName;
         String wtFileName;
