@@ -42,8 +42,8 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     private JFileChooser saveDirChsr;
 
-    private JProgressBar totalProg;
-    private JProgressBar partialProg;
+//    private JProgressBar totalProg;
+//    private JProgressBar partialProg;
 
     public NaverCrawlerGUI() {
 
@@ -135,14 +135,19 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel = new JPanel();
         wtListPanel.setLayout(new BoxLayout(wtListPanel, BoxLayout.Y_AXIS));
 
-        wtListPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+//        wtListPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
         wtListScrollPane = new JScrollPane();
-        wtListScrollPane.setPreferredSize(new Dimension(620, 500));
-        wtListScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
+        wtListScrollPane.setPreferredSize(new Dimension(622, 500));
+        wtListScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         // Create components for the webtoon list panel.
-        wtListLabel = new JLabel("엡툰 목록은 여기에 다운로드~!");
+        String howto = "<html><<center>사용 방법</center><br>" +
+                "1. 메인 카테고리, 하위 케티고리를 선택한다.<br><br>" +
+                "2. '저장 경로를 선택' 버튼을 누르고 저장 경로를 선택한다.<br><br>" +
+                "3. '웹툰 목록 가져오기~' 버튼을 클릭한다.<br><br>" +
+                "4. 보고 싶은 웹툰에 해당하는 '웹툰 다운로드' 버튼을 누른다.<br><br>";
+        wtListLabel = new JLabel(howto);
         wtListPanel.add(wtListLabel);
         wtListScrollPane.getViewport().setView(wtListPanel);
 
@@ -201,34 +206,72 @@ public class NaverCrawlerGUI implements NaverConstants {
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
         // Now display the information
-        for (final NaverWebtoonInfo info : infos) {
+        for (NaverWebtoonInfo info : infos) {
             // A panel to hold a webtoon info
             JPanel curWtPanel = new JPanel();
-            curWtPanel.setLayout(new FlowLayout());
-            curWtPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+            curWtPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 2));
+            curWtPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+            curWtPanel.setPreferredSize(new Dimension(580, 120));
 
             // Create a thumbnail with its title
             JLabel curLabel = new JLabel(info.getTitleName(), info.getThumb(),
                     SwingConstants.LEFT);
             curLabel.setVerticalTextPosition(SwingConstants.TOP);
             curLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+            curLabel.setPreferredSize(new Dimension(150, 110));
 
+            // Create a Panel to hold buttons
+            JPanel btnPanel = new JPanel();
+            btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.Y_AXIS));
+            btnPanel.setPreferredSize(new Dimension(150, 110));
+
+            // Create a Panel to hold progress info
+            JPanel progInfoPanel = new JPanel();
+            progInfoPanel.setLayout(
+                    new BoxLayout(progInfoPanel, BoxLayout.Y_AXIS));
+            progInfoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            progInfoPanel.setPreferredSize(new Dimension(280, 110));
 
             // Create a button to download and a button to cancel
             JButton wtDownload = new JButton("웹툰 다운로드");
             JButton wtPause = new JButton("일시정지");
             JButton wtCancel = new JButton("다운로드 취소");
-            JLabel wtMsgLabel = new JLabel();
-
 
             // Create a progress bar for the total progress
             // and another progress bar for the partial progress
-            totalProg = new JProgressBar();
-            partialProg = new JProgressBar();
+            JProgressBar totalProg = new JProgressBar();
+            JProgressBar partialProg = new JProgressBar();
+
+            // Set progress bars' sizes appropriately
+            totalProg.setPreferredSize(new Dimension(200, 20));
+            partialProg.setPreferredSize(new Dimension(200, 20));
 
             // Display the percentage string.
             totalProg.setStringPainted(true);
             partialProg.setStringPainted(true);
+
+            // Create labels for progress bars
+            JLabel wtMsgLabel = new JLabel("저장 위치: ");
+            JLabel totalProgLabel = new JLabel("전체 :");
+            JLabel partialProgLabel = new JLabel("현재 :");
+
+            // Set labels' sizes appropriately
+            totalProgLabel.setPreferredSize(new Dimension(50, 20));
+            partialProgLabel.setPreferredSize(new Dimension(50, 20));
+
+            // Group progress bars and their labels together
+            JPanel totalProgPanel = new JPanel();
+            totalProgPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 2));
+            totalProgPanel.setPreferredSize(new Dimension(270, 50));
+            totalProgPanel.add(totalProgLabel);
+            totalProgPanel.add(totalProg);
+
+            JPanel partialProgPanel = new JPanel();
+            partialProgPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 2));
+            partialProgPanel.setPreferredSize(new Dimension(270, 50));
+            partialProgPanel.add(partialProgLabel);
+            partialProgPanel.add(partialProg);
+
 
             // Set the button settings
             wtDownload.setEnabled(true);
@@ -250,13 +293,23 @@ public class NaverCrawlerGUI implements NaverConstants {
             wtPause.addActionListener(downloadListener);
             wtCancel.addActionListener(downloadListener);
 
+            // Add the buttons to their panel with spacing
+            btnPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            btnPanel.add(wtDownload);
+            btnPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            btnPanel.add(wtPause);
+            btnPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            btnPanel.add(wtCancel);
+
+            // Add the progress msg and bars to their panel
+            progInfoPanel.add(wtMsgLabel);
+            progInfoPanel.add(totalProgPanel);
+            progInfoPanel.add(partialProgPanel);
+
+            // Add labels and panels to the current webtoon panel
             curWtPanel.add(curLabel);
-            curWtPanel.add(wtDownload);
-            curWtPanel.add(wtPause);
-            curWtPanel.add(wtCancel);
-            curWtPanel.add(wtMsgLabel);
-            curWtPanel.add(totalProg);
-            curWtPanel.add(partialProg);
+            curWtPanel.add(btnPanel);
+            curWtPanel.add(progInfoPanel);
 
             wtListPanel.add(curWtPanel);
         }
