@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
 
 /**
@@ -69,7 +68,7 @@ public class NaverWebtoonDownloader implements Runnable {
     public void run() {
         pw.println("downloading beings!");
         String wtListURL; // The url that lists all available webtoon series
-        String wtURL, imgURL, wtSeriesName, wtSeriesFolderName, wtImgName;
+        String wtURL, imgURL, wtSeriesName;
         String wtFileName;
         Element wtList = null, wtPage, wtViewer;
         Matcher wtTotalMatcher;
@@ -80,7 +79,7 @@ public class NaverWebtoonDownloader implements Runnable {
         double totalInc;
         double partialInc;
 
-        Path base = null, wtDir = null, wtSeriesDir;
+        Path base, wtDir = null, wtSeriesDir;
 
         // Figure out the number of total series
         wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());

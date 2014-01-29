@@ -60,7 +60,6 @@ public class NaverWebtoonCrawler {
         imgList = content.getElementsByClass("img_list").first().children();
         webtoonTotal = imgList.size();
 
-//        pw.format("Total of %d cartoons\n", webtoonTotal);
         info = new NaverWebtoonInfo[webtoonTotal];
 
 
@@ -81,138 +80,9 @@ public class NaverWebtoonCrawler {
                 pw.println("Unable to download thumbnail from url " + thumbURL);
                 e.printStackTrace();
             }
-
-            // TODO: Replace below with log
-//            pw.format("link = %s\n", href);
-//            pw.format("title = %s\n", link.attr("title"));
-//            pw.format("titleId = %s\n", mat.group(1));
-//            pw.format("\n");
         }
-//        pw.format("\n");
+
         return info;
     }
-
-
-    /**
-     * Download all images for this webtoon.
-     *
-     * @param info Information about the webtoon you want to download.
-     * @return true if the download was successful. False otherwise.
-     */
-    public static boolean downloadWebtoon(NaverWebtoonInfo info,
-                                          JProgressBar totalProg,
-                                          JProgressBar partialProg
-                                          ) {
-
-        String wtListURL; // The url that lists all available webtoon series
-        String wtURL, imgURL, wtSeriesName, wtSeriesFolderName, wtImgName;
-        String wtFileName;
-        Element wtList, wtPage, wtViewer;
-        Matcher wtTotalMatcher;
-        Response wtRes;
-        FileOutputStream wtOut;
-        int wtTotal; //The total number of available webtoon series
-        int wtCount;
-        int totalInc;
-        int partialInc;
-
-        Path base, wtDir = null, wtSeriesDir;
-
-        // Figure out the number of total series
-        wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());
-        try {
-            wtList = Jsoup.connect(wtListURL).get();
-        } catch (IOException e) {
-            pw.println("Unable to connect to " + wtListURL);
-            e.printStackTrace();
-            return false;
-        }
-
-        String href = wtList.getElementById("content")
-                .getElementsByClass("title").first()
-                .getElementsByTag("a").first().attr("href");
-
-        // Use Regex to pull the total number of series from the href link
-        wtTotalMatcher = NaverWebtoonURL.noPat.matcher(href);
-        wtTotalMatcher.find();
-        wtTotal = Integer.parseInt(wtTotalMatcher.group(1));
-
-        totalInc = (totalProg.getMaximum() - totalProg.getMinimum()) / wtTotal;
-
-        try {
-            base = Paths.get("").resolve("네이버 웹툰"); // get the base directory
-            if (!Files.exists(base)) Files.createDirectory(base);
-
-            wtDir = base.resolve(info.getTitleName()); // create the webtoon directory
-            if (!Files.exists(wtDir)) Files.createDirectory(wtDir);
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        // Go through each series and download them
-        for (int curSeries = 1; curSeries <= wtTotal; curSeries++) {
-
-            wtURL = NaverWebtoonURL.getWebtoonDetailURL(info.getTitleId(), curSeries);
-
-            try {
-                wtPage = Jsoup.connect(wtURL).get();
-                wtSeriesName = wtPage.getElementsByClass("tit_area").first()
-                        .getElementsByClass("view").first()
-                        .getElementsByTag("h3").first().ownText();
-                wtSeriesDir = wtDir.resolve(wtSeriesName);
-
-                // Display what is being downloaded
-                totalProg.setString(wtSeriesName);
-
-                // If the folder exist, I assume that the contents have been
-                // already downloaded
-                if (Files.exists(wtSeriesDir)) {
-                    totalProg.setValue(totalInc * curSeries);
-                    continue;
-                }
-
-                // Create the folder
-                Files.createDirectory(wtSeriesDir);
-
-                // download images
-                wtCount = 1;
-                wtViewer = wtPage.getElementsByClass("wt_viewer").first();
-                partialInc =
-                        (partialProg.getMaximum() - partialProg.getMinimum())
-                        / wtViewer.children().size();
-                int ct = 0;
-                for (Element imgLink : wtViewer.children()) {
-                    // display the partial progress
-                    partialProg.setValue(partialInc * (ct++));
-
-                    imgURL = imgLink.absUrl("src");
-
-                    // Check that imgURL is actually an image file
-                    if (imgURL == null || !imgURL.endsWith(".jpg")) continue;
-
-                    wtRes = Jsoup.connect(imgURL).referrer(wtURL)
-                            .ignoreContentType(true).execute();
-                    wtFileName = "Image_" + (wtCount++) + ".jpg";
-                    wtOut = new FileOutputStream(wtSeriesDir.resolve(wtFileName).toFile());
-
-                    // save it!
-                    wtOut.write(wtRes.bodyAsBytes());
-                    wtOut.close();
-                }
-                partialProg.setValue(partialInc * ct);
-
-                // display the total progress
-                totalProg.setValue(totalInc * curSeries);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-        return true;
-    }
-
 
 }

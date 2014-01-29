@@ -29,6 +29,7 @@ public class NaverWebtoonURL {
 
 
     public static String getDayListURL(final Day day) {
+        if(day == Day.ALL) return WEBTOON_BASE + "/finish.nhn";
         return WEBTOON_WEEKDAY_BASE + day.getDay();
     }
 

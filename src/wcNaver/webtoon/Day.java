@@ -2,7 +2,7 @@ package wcNaver.webtoon;
 
 public enum Day {
     MON("mon"), TUES("tue"), WEDS("wed"), THURS("thu"), FRI("fri"),
-    SAT("sat"), SUN("sun");
+    SAT("sat"), SUN("sun"), ALL("all");
 
     private String day;
 

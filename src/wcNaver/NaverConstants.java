@@ -28,6 +28,7 @@ public interface NaverConstants {
                 add(new LabelValueTuple<>("금", Day.FRI));
                 add(new LabelValueTuple<>("토", Day.SAT));
                 add(new LabelValueTuple<>("일", Day.SUN));
+                add(new LabelValueTuple<>("완결", Day.ALL));
             }};
 
 

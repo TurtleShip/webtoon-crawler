@@ -22,9 +22,11 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JPanel myFacePanel; // TODO: When I am ready, post my handsome face.
     private JPanel selectionPanel;
     private JPanel wtListPanel;
-    private JScrollPane wtListScrollPane;
     private JPanel progressPanel;
     private JPanel wtPanel;
+
+    private JScrollPane wtListScrollPane;
+    private JScrollPane selSubScrollPane;
 
     private JLabel mainLabel;
     private JLabel subLabel;
@@ -85,14 +87,19 @@ public class NaverCrawlerGUI implements NaverConstants {
         mainSelectorList.setPreferredSize(new Dimension(150, 130));
         mainSelectorList.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
 
+        // Create the sub selector with a scroll pane.
+        selSubScrollPane = new JScrollPane();
+        selSubScrollPane.setPreferredSize(new Dimension(150, 130));
+        selSubScrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+
         // Create the sub selector with a label.
         subLabel = new JLabel("하위 카테고리");
         subLabel.setPreferredSize(new Dimension(150, 10));
         subSelectorList = new JList(WEBTOON_CAT.toArray());
         subSelectorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         subSelectorList.setSelectedIndex(0);
-        subSelectorList.setPreferredSize(new Dimension(150, 130));
-        subSelectorList.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
+        selSubScrollPane.getViewport().setView(subSelectorList);
+
 
         // Add a button that user can click to download stuff.
         getListBtn = new JButton("웹툰 목록 가져오기~");
@@ -102,7 +109,8 @@ public class NaverCrawlerGUI implements NaverConstants {
         selectionPanel.add(mainLabel);
         selectionPanel.add(subLabel);
         selectionPanel.add(mainSelectorList);
-        selectionPanel.add(subSelectorList);
+        selectionPanel.add(selSubScrollPane);
+//        selectionPanel.add(subSelectorList);
         selectionPanel.add(getListBtn);
     }
 
