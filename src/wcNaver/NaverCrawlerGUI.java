@@ -42,9 +42,6 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     private JFileChooser saveDirChsr;
 
-//    private JProgressBar totalProg;
-//    private JProgressBar partialProg;
-
     public NaverCrawlerGUI() {
 
         try {
@@ -60,7 +57,19 @@ public class NaverCrawlerGUI implements NaverConstants {
         jfrm.setResizable(false); // Make it not resizable for now.
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        setupSelectionPane();
+        setupProgressPanel();
+        setupWtListScrollPane();
 
+        // Add the selectionPanel to the main frame.
+        jfrm.add(selectionPanel);
+        jfrm.add(progressPanel);
+        jfrm.add(wtListScrollPane);
+
+        jfrm.setVisible(true);
+    }
+
+    private void setupSelectionPane() {
         // Create a selection panel where users will select cartoons
         selectionPanel = new JPanel();
         selectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
@@ -95,8 +104,9 @@ public class NaverCrawlerGUI implements NaverConstants {
         selectionPanel.add(mainSelectorList);
         selectionPanel.add(subSelectorList);
         selectionPanel.add(getListBtn);
+    }
 
-
+    private void setupProgressPanel() {
         // Create a progress panel.
         progressPanel = new JPanel();
         progressPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
@@ -104,8 +114,6 @@ public class NaverCrawlerGUI implements NaverConstants {
         progressPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         // Create components for the progress panel.
-//        progressLabel = new JLabel("나는야 프로그래스 레이블");
-
         saveDirChsr = new JFileChooser();
         saveDirChsr.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -125,17 +133,15 @@ public class NaverCrawlerGUI implements NaverConstants {
             }
         });
 
-//        progressPanel.add(progressLabel);
         progressPanel.add(chseDirBtn);
         progressPanel.add(saveDirMsgLabel);
         progressPanel.add(saveDirLabel);
+    }
 
-
+    private void setupWtListScrollPane() {
         // Create a webtoon list panel.
         wtListPanel = new JPanel();
         wtListPanel.setLayout(new BoxLayout(wtListPanel, BoxLayout.Y_AXIS));
-
-//        wtListPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 
         wtListScrollPane = new JScrollPane();
         wtListScrollPane.setPreferredSize(new Dimension(622, 500));
@@ -151,19 +157,11 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.add(wtListLabel);
         wtListScrollPane.getViewport().setView(wtListPanel);
 
-        // Add the selectionPanel to the main frame.
-        jfrm.add(selectionPanel);
-        jfrm.add(progressPanel);
-        jfrm.add(wtListScrollPane);
-
         // Set up buttons
         setupGetListBtn();
-
-        jfrm.setVisible(true);
     }
 
-
-    public void setupGetListBtn() {
+    private void setupGetListBtn() {
         getListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -201,7 +199,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         });
     }
 
-    public void getWebtoonList(wcNaver.webtoon.Day day) {
+    public void getWebtoonList(Day day) {
         NaverWebtoonInfo[] infos
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
