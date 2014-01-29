@@ -53,7 +53,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         JFrame jfrm = new JFrame("네이버 크롤러");
         jfrm.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        jfrm.setSize(625, 760);
+        jfrm.setSize(650, 760);
         jfrm.setResizable(false); // Make it not resizable for now.
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

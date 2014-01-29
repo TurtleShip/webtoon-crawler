@@ -4,6 +4,8 @@
 # Ignore Intellij files
 .idea/
 WebtoonCrawler.iml
+out
+src/META-INF/
 
 # Ignore compiled class files
 *.class
