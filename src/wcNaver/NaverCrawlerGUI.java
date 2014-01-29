@@ -30,13 +30,16 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JLabel progressLabel;
     private JLabel wtListLabel;
     private JLabel wtLabel;
+    private JLabel saveDirMsgLabel;
+    private JLabel saveDirLabel;
 
     private JList mainSelectorList;
     private JList subSelectorList;
 
     private JButton getListBtn;
-//    private JButton wtDownload;
-//    private JButton wtCancel;
+    private JButton chseDirBtn;
+
+    private JFileChooser saveDirChsr;
 
     private JProgressBar totalProg;
     private JProgressBar partialProg;
@@ -101,7 +104,30 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         // Create components for the progress panel.
         progressLabel = new JLabel("나는야 프로그래스 레이블");
+
+        saveDirChsr = new JFileChooser();
+        saveDirChsr.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        saveDirMsgLabel = new JLabel("저장 경로를 선택하세요~!");
+        saveDirLabel = new JLabel("");
+
+        chseDirBtn = new JButton("저장 경로 선택");
+        chseDirBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(saveDirChsr.showOpenDialog(progressPanel)
+                        == JFileChooser.APPROVE_OPTION) {
+                    saveDirMsgLabel.setText("저장경로 : ");
+                    saveDirLabel.setText(
+                            saveDirChsr.getSelectedFile().getAbsolutePath());
+                }
+            }
+        });
+
         progressPanel.add(progressLabel);
+        progressPanel.add(chseDirBtn);
+        progressPanel.add(saveDirMsgLabel);
+        progressPanel.add(saveDirLabel);
 
 
         // Create a webtoon list panel.
@@ -226,12 +252,6 @@ public class NaverCrawlerGUI implements NaverConstants {
             // and another bar for the partial progress
             totalProg = new JProgressBar();
             partialProg = new JProgressBar();
-
-
-
-
-
-
 
             curWtPanel.add(curLabel);
             curWtPanel.add(wtDownload);
