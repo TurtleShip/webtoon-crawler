@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Paths;
 
 
 /**
@@ -115,7 +116,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         chseDirBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(saveDirChsr.showOpenDialog(progressPanel)
+                if (saveDirChsr.showOpenDialog(progressPanel)
                         == JFileChooser.APPROVE_OPTION) {
                     saveDirMsgLabel.setText("저장경로 : ");
                     saveDirLabel.setText(
@@ -132,7 +133,6 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         // Create a webtoon list panel.
         wtListPanel = new JPanel();
-//        wtListPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
         wtListPanel.setLayout(new BoxLayout(wtListPanel, BoxLayout.Y_AXIS));
 
         wtListPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
@@ -145,15 +145,10 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListLabel = new JLabel("엡툰 목록은 여기에 다운로드~!");
         wtListPanel.add(wtListLabel);
         wtListScrollPane.getViewport().setView(wtListPanel);
-//        wtListPanel.add(wtListLabel);
-
-//        wtListPane.add(wtListLabel);
-//        wtListPane = new JScrollPane(wtListPanel);
 
         // Add the selectionPanel to the main frame.
         jfrm.add(selectionPanel);
         jfrm.add(progressPanel);
-//        jfrm.add(wtListPanel);
         jfrm.add(wtListScrollPane);
 
         // Set up buttons
@@ -203,7 +198,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     public void getWebtoonList(wcNaver.webtoon.Day day) {
         NaverWebtoonInfo[] infos
-                = wcNaver.webtoon.NaverWebtoonCrawler.downloadWebtoonListByDay(day);
+                = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
 
         // Now display the information
@@ -223,48 +218,69 @@ public class NaverCrawlerGUI implements NaverConstants {
             // Create a button to download and a button to cancel
             final JButton wtDownload = new JButton("웹툰 다운로드");
             final JButton wtCancel = new JButton("다운로드 취소");
-            wtCancel.setEnabled(false);
-
-            // Add functionality to the buttons
-            wtDownload.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent ae) {
-                    // Adjust buttons accordingly
-                    wtDownload.setEnabled(false);
-                    wtCancel.setEnabled(true);
-
-                    // Grab a path to save folders
-
-                    // Start the download
-                    NaverWebtoonCrawler.downloadWebtoon(info);
-                }
-            });
-
-            wtCancel.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    wtDownload.setEnabled(true);
-                    wtCancel.setEnabled(false);
-                }
-            });
+            final JLabel wtMsgLabel = new JLabel();
 
             // Create a progress bar for the total progress
             // and another bar for the partial progress
             totalProg = new JProgressBar();
             partialProg = new JProgressBar();
 
+            // Display the percentage string.
+            totalProg.setStringPainted(true);
+            partialProg.setStringPainted(true);
+
+            final NaverWebtoonDownloader downloader
+                    = new NaverWebtoonDownloader(info, totalProg, partialProg);
+
+            wtCancel.setEnabled(false);
+
+            // Add functionality to the buttons
+            wtDownload.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+
+                    // Grab a path to save folders
+                    if (saveDirLabel.getText() == "") {
+                        wtMsgLabel.setText("저장 경로를 선택하세요!");
+                        return;
+                    }
+
+                    downloader.setSaveDir(Paths.get(saveDirLabel.getText()));
+
+                    // Adjust buttons accordingly
+                    wtDownload.setEnabled(false);
+                    wtCancel.setEnabled(true);
+
+                    wtMsgLabel.setText("저장 위치: " + saveDirLabel.getText());
+
+                    // Start the download
+                    downloader.start();
+                }
+            });
+
+            wtCancel.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    wtDownload.setEnabled(true);
+                    wtCancel.setEnabled(false);
+                    downloader.shutdown();
+                }
+            });
+
+
             curWtPanel.add(curLabel);
             curWtPanel.add(wtDownload);
             curWtPanel.add(wtCancel);
+            curWtPanel.add(wtMsgLabel);
+            curWtPanel.add(totalProg);
+            curWtPanel.add(partialProg);
 
             wtListPanel.add(curWtPanel);
-//            wtListPanel.add(curLabel);
-
         }
 
         wtListPanel.revalidate();
         wtListPanel.repaint();
-//        wtListPane.revalidate();
     }
 
     public void getBestChallengeList() {

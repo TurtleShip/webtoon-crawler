@@ -92,14 +92,17 @@ public class NaverWebtoonCrawler {
         return info;
     }
 
+
     /**
      * Download all images for this webtoon.
      *
      * @param info Information about the webtoon you want to download.
      * @return true if the download was successful. False otherwise.
      */
-    public static boolean downloadWebtoon(NaverWebtoonInfo info) {
-
+    public static boolean downloadWebtoon(NaverWebtoonInfo info,
+                                          JProgressBar totalProg,
+                                          JProgressBar partialProg
+                                          ) {
 
         String wtListURL; // The url that lists all available webtoon series
         String wtURL, imgURL, wtSeriesName, wtSeriesFolderName, wtImgName;
@@ -110,6 +113,8 @@ public class NaverWebtoonCrawler {
         FileOutputStream wtOut;
         int wtTotal; //The total number of available webtoon series
         int wtCount;
+        int totalInc;
+        int partialInc;
 
         Path base, wtDir = null, wtSeriesDir;
 
@@ -132,6 +137,8 @@ public class NaverWebtoonCrawler {
         wtTotalMatcher.find();
         wtTotal = Integer.parseInt(wtTotalMatcher.group(1));
 
+        totalInc = (totalProg.getMaximum() - totalProg.getMinimum()) / wtTotal;
+
         try {
             base = Paths.get("").resolve("네이버 웹툰"); // get the base directory
             if (!Files.exists(base)) Files.createDirectory(base);
@@ -145,6 +152,7 @@ public class NaverWebtoonCrawler {
 
         // Go through each series and download them
         for (int curSeries = 1; curSeries <= wtTotal; curSeries++) {
+
             wtURL = NaverWebtoonURL.getWebtoonDetailURL(info.getTitleId(), curSeries);
 
             try {
@@ -152,14 +160,17 @@ public class NaverWebtoonCrawler {
                 wtSeriesName = wtPage.getElementsByClass("tit_area").first()
                         .getElementsByClass("view").first()
                         .getElementsByTag("h3").first().ownText();
+                wtSeriesDir = wtDir.resolve(wtSeriesName);
 
-//                wtSeriesFolderName = String.format("%d_%s", curSeries, wtSeriesName);
-                wtSeriesFolderName = wtSeriesName;
-                wtSeriesDir = wtDir.resolve(wtSeriesFolderName);
+                // Display what is being downloaded
+                totalProg.setString(wtSeriesName);
 
                 // If the folder exist, I assume that the contents have been
                 // already downloaded
-                if (Files.exists(wtSeriesDir)) continue;
+                if (Files.exists(wtSeriesDir)) {
+                    totalProg.setValue(totalInc * curSeries);
+                    continue;
+                }
 
                 // Create the folder
                 Files.createDirectory(wtSeriesDir);
@@ -167,13 +178,19 @@ public class NaverWebtoonCrawler {
                 // download images
                 wtCount = 1;
                 wtViewer = wtPage.getElementsByClass("wt_viewer").first();
+                partialInc =
+                        (partialProg.getMaximum() - partialProg.getMinimum())
+                        / wtViewer.children().size();
+                int ct = 0;
                 for (Element imgLink : wtViewer.children()) {
+                    // display the partial progress
+                    partialProg.setValue(partialInc * (ct++));
+
                     imgURL = imgLink.absUrl("src");
 
                     // Check that imgURL is actually an image file
                     if (imgURL == null || !imgURL.endsWith(".jpg")) continue;
 
-                    pw.println("downloading " + imgURL);
                     wtRes = Jsoup.connect(imgURL).referrer(wtURL)
                             .ignoreContentType(true).execute();
                     wtFileName = "Image_" + (wtCount++) + ".jpg";
@@ -183,8 +200,11 @@ public class NaverWebtoonCrawler {
                     wtOut.write(wtRes.bodyAsBytes());
                     wtOut.close();
                 }
+                partialProg.setValue(partialInc * ct);
 
-                // download all images within images
+                // display the total progress
+                totalProg.setValue(totalInc * curSeries);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
