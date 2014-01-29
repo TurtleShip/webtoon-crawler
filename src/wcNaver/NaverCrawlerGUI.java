@@ -33,6 +33,7 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JLabel wtListLabel;
     private JLabel saveDirMsgLabel;
     private JLabel saveDirLabel;
+    private JLabel tmpMsgLabel;
 
     private JList mainSelectorList;
     private JList subSelectorList;
@@ -41,6 +42,9 @@ public class NaverCrawlerGUI implements NaverConstants {
     private JButton chseDirBtn;
 
     private JFileChooser saveDirChsr;
+
+    private JProgressBar tmpProgBar;
+
 
     public NaverCrawlerGUI() {
 
@@ -168,11 +172,15 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.add(wtListLabel);
         wtListScrollPane.getViewport().setView(wtListPanel);
 
-        // Set up buttons
+        // Set up "웹툰 목록 가져오기~" button
         setupGetListBtn();
     }
 
     private void setupGetListBtn() {
+        tmpMsgLabel = new JLabel("목록을 가져오는 중입니다...");
+        tmpProgBar = new JProgressBar();
+        tmpProgBar.setIndeterminate(true);
+
         getListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -190,9 +198,24 @@ public class NaverCrawlerGUI implements NaverConstants {
                 // Clear list panel
                 wtListPanel.removeAll();
 
+                // Show temporary message while downloading list
+                getListBtn.setEnabled(false);
+                wtListPanel.add(tmpMsgLabel);
+                wtListPanel.add(tmpProgBar);
+                wtListPanel.revalidate();
+                wtListPanel.repaint();
+
                 switch (mainCat) {
                     case "webtoon":
-                        getWebtoonList(subCat);
+                        final Day tmpD = subCat;
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWebtoonList(tmpD);
+                            }
+                        }).start();
+//                        getWebtoonList(subCat);
                         break;
 
                     case "best":
@@ -214,6 +237,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         NaverWebtoonInfo[] infos
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
+        wtListPanel.removeAll();
         // Now display the information
         for (NaverWebtoonInfo info : infos) {
             // A panel to hold a webtoon info
@@ -325,6 +349,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         wtListPanel.revalidate();
         wtListPanel.repaint();
+        getListBtn.setEnabled(true);
     }
 
     public void getBestChallengeList() {
