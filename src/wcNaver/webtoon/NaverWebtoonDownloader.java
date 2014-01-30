@@ -103,6 +103,12 @@ public class NaverWebtoonDownloader implements Runnable {
                 (double) wtTotal;
 
         try {
+            /*
+            TODO: saveDir.resolve doesn't work and causes this method to
+             terminate when this application is run by double-click
+             in Mac OS. It works find in Windows. Figure out what is
+             wrong when I have time.
+             */
             base = saveDir.resolve("네이버 웹툰"); // get the base directory
             if (!Files.exists(base)) Files.createDirectory(base);
 
