@@ -3,7 +3,8 @@ package wcNaver;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import wcNaver.NaverToonInfo;
+import wcNaver.bestChallenge.NaverBCURL;
+import wcNaver.challenge.NaverCHURL;
 import wcNaver.webtoon.NaverWebtoonURL;
 
 import javax.swing.*;
@@ -28,6 +29,7 @@ public class NaverToonDownloader implements Runnable {
     private PrintWriter pw = new PrintWriter(System.out, true);
     private Thread thread;
     private Path saveDir;
+    private NaverToonCategory cat;
 
     public NaverToonDownloader(NaverToonInfo info,
                                JProgressBar totalProg,
@@ -35,6 +37,7 @@ public class NaverToonDownloader implements Runnable {
         this.info = info;
         this.totalProg = totalProg;
         this.partialProg = partialProg;
+        this.cat = info.getCategory();
         thread = new Thread(this);
     }
 
@@ -69,8 +72,8 @@ public class NaverToonDownloader implements Runnable {
     @Override
     public void run() {
 
-        String wtListURL; // The url that lists all available webtoon series
-        String wtURL, imgURL, wtSeriesName;
+        String wtListURL = ""; // The url that lists all available webtoon series
+        String wtURL = "", imgURL, wtSeriesName;
         String wtFileName;
         Element wtList = null, wtPage, wtViewer;
         Matcher wtTotalMatcher;
@@ -81,10 +84,17 @@ public class NaverToonDownloader implements Runnable {
         double totalInc;
         double partialInc;
 
-        Path base, wtDir = null, wtSeriesDir;
+        Path base = null, wtDir = null, wtSeriesDir;
 
         // Figure out the number of total series
-        wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());
+        if (cat == NaverToonCategory.WEBTOON) {
+            wtListURL = NaverWebtoonURL.getWebtoonListURL(info.getTitleId());
+        } else if (cat == NaverToonCategory.BEST) {
+            wtListURL = NaverBCURL.getBCListURL(info.getTitleId());
+        } else {
+            wtListURL = NaverCHURL.getChListURL(info.getTitleId());
+        }
+
         try {
             wtList = Jsoup.connect(wtListURL).get();
         } catch (IOException e) {
@@ -111,7 +121,14 @@ public class NaverToonDownloader implements Runnable {
              in Mac OS. It works find in Windows. Figure out what is
              wrong when I have time.
              */
-            base = saveDir.resolve("네이버 웹툰"); // get the base directory
+            if (cat == NaverToonCategory.WEBTOON) {
+                base = saveDir.resolve("네이버 웹툰"); // get the base directory
+            } else if (cat == NaverToonCategory.BEST) {
+                base = saveDir.resolve("베스트 도전");
+            } else {
+                base = saveDir.resolve("도전만화");
+            }
+
             if (!Files.exists(base)) Files.createDirectory(base);
 
             wtDir = base.resolve(info.getTitleName()); // create the webtoon directory
@@ -126,7 +143,14 @@ public class NaverToonDownloader implements Runnable {
             // display the total progress
             totalProg.setValue((int) (totalInc * (curSeries - 1)));
 
-            wtURL = NaverWebtoonURL.getWebtoonDetailURL(info.getTitleId(), curSeries);
+            if(cat ==  NaverToonCategory.WEBTOON) {
+                wtURL = NaverWebtoonURL.getWebtoonDetailURL(info.getTitleId(), curSeries);
+            } else if(cat == NaverToonCategory.BEST) {
+                wtURL = NaverBCURL.getBCDetailURL(info.getTitleId(), curSeries);
+            } else {
+                wtURL = NaverCHURL.getChDetailURL(info.getTitleId(), curSeries);
+            }
+
 
             try {
                 wtPage = Jsoup.connect(wtURL).get();

@@ -1,6 +1,7 @@
 package wcNaver.bestChallenge;
 
 import wcNaver.NaverURL;
+import wcNaver.challenge.Genre;
 
 import java.util.regex.Pattern;
 

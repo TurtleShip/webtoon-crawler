@@ -1,8 +1,9 @@
 package wcNaver;
 
 import theCrawler.LabelValueTuple;
-import wcNaver.bestChallenge.Genre;
 import wcNaver.bestChallenge.NaverBCCrawler;
+import wcNaver.challenge.Genre;
+import wcNaver.challenge.NaverCHCrawler;
 import wcNaver.webtoon.*;
 
 import javax.swing.*;
@@ -134,7 +135,7 @@ public class NaverCrawlerGUI implements NaverConstants {
                         break;
 
                     case "challenge":
-                        subSelectorList.setListData(CHALLENGE_CAT);
+                        subSelectorList.setListData(CHALLENGE_CAT.toArray());
                         pageLabel.setEnabled(true);
                         pageNumSpinner.setEnabled(true);
                         break;
@@ -288,11 +289,17 @@ public class NaverCrawlerGUI implements NaverConstants {
                         break;
 
                     case "challenge":
-
+                        final Genre genreCh =
+                                ((LabelValueTuple<Genre>) subSelectorList.getSelectedValue())
+                                        .getValue();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getChallengeList(genreCh,
+                                        (Integer) pageNumSpinner.getValue());
+                            }
+                        }).start();
                         break;
-
-                    default:
-                        wtListLabel.setText("... 헐?");
                 }
             }
         });
@@ -305,14 +312,15 @@ public class NaverCrawlerGUI implements NaverConstants {
     }
 
     public void getBestChallengeList(Genre genre, int pageNum) {
-        System.out.println("Gettting list");
         NaverToonInfo[] infos
                 = NaverBCCrawler.downloadBCListByGenre(genre, pageNum);
         populateNaverToon(infos);
     }
 
-    public void getChallengeList() {
-
+    public void getChallengeList(Genre genre, int pageNum) {
+        NaverToonInfo[] infos
+                = NaverCHCrawler.downloadCHListByGenre(genre, pageNum);
+        populateNaverToon(infos);
     }
 
     private void populateNaverToon(NaverToonInfo[] infos) {

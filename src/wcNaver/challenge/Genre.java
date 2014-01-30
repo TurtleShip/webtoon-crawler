@@ -1,4 +1,4 @@
-package wcNaver.bestChallenge;
+package wcNaver.challenge;
 
 /**
  *

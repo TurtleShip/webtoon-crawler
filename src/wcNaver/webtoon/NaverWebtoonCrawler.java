@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import wcNaver.NaverToonCategory;
 import wcNaver.NaverToonInfo;
 
 import javax.swing.*;
@@ -69,7 +70,8 @@ public class NaverWebtoonCrawler {
             mat.find();
             try {
                 info[i] = new NaverToonInfo(mat.group(1), link.attr("title"),
-                        new ImageIcon(new URL(thumbURL)));
+                        new ImageIcon(new URL(thumbURL)),
+                        NaverToonCategory.WEBTOON);
             } catch (MalformedURLException e) {
                 pw.println("Unable to download thumbnail from url " + thumbURL);
                 e.printStackTrace();

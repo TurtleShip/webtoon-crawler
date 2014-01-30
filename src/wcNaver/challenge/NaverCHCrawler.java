@@ -1,4 +1,4 @@
-package wcNaver.bestChallenge;
+package wcNaver.challenge;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -6,7 +6,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import wcNaver.NaverToonCategory;
 import wcNaver.NaverToonInfo;
-import wcNaver.challenge.Genre;
 import wcNaver.webtoon.NaverWebtoonURL;
 
 import javax.swing.*;
@@ -17,13 +16,13 @@ import java.net.URL;
 import java.util.regex.Matcher;
 
 /**
- * This class provides utility methods to crawl naver best challenges
+ * This class provides utility methods to crawl naver challenges webtoons.
  */
-public class NaverBCCrawler {
+public class NaverCHCrawler {
 
     private static PrintWriter pw = new PrintWriter(System.out, true);
 
-    public static NaverToonInfo[] downloadBCListByGenre(Genre genre, int pageNum) {
+    public static NaverToonInfo[] downloadCHListByGenre(Genre genre, int pageNum) {
 
         // Create necessary references
         NaverToonInfo[] info;
@@ -36,7 +35,7 @@ public class NaverBCCrawler {
 
         // Try connect to url.
         try {
-            url = NaverBCURL.getGenreListURL(genre, pageNum);
+            url = NaverCHURL.getGenreListURL(genre, pageNum);
             doc = Jsoup.connect(url).get();
         } catch (IOException ioe) {
             pw.println("Unable to connect to " + url);
@@ -48,17 +47,12 @@ public class NaverBCCrawler {
         listBox = doc.getElementById("content")
                 .getElementsByClass("weekchallengeBox").first();
 
-        // Each element in imgList contains a thumbnail and a link to the BC
+        // Each element in imgList contains a thumbnail and a link to the CH
         imgList = listBox.getElementsByClass("fl");
-
-        // Each element in titleList contains a title and a link to the BC
-//        titleList = listBox.getElementsByClass("challengeTitle");
 
         // Initialize NaverToonInfo
         BCTotal = imgList.size();
         info = new NaverToonInfo[BCTotal];
-
-        pw.println("Getting total of " + BCTotal + " best challenges");
 
         for (int i = 0; i < BCTotal; i++) {
             img = imgList.get(i);
@@ -75,12 +69,13 @@ public class NaverBCCrawler {
                 info[i] = new NaverToonInfo(mat.group(1),
                         link.child(0).attr("title"),
                         new ImageIcon(new URL(thumbURL)),
-                        NaverToonCategory.BEST);
-            } catch( MalformedURLException me ) {
+                        NaverToonCategory.CHALLENGE);
+            } catch (MalformedURLException me) {
                 me.printStackTrace();
             }
         }
 
         return info;
     }
+
 }
