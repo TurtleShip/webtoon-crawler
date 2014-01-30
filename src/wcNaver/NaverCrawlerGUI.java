@@ -51,9 +51,9 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     private JSpinner pageNumSpinner;
 
-    final private Dimension mainDim = new Dimension(650, 760);
-    final private Dimension selPanelDim = new Dimension(310, 220);
-    final private Dimension myProPanelDim = new Dimension(310, 220);
+    final private Dimension mainDim = new Dimension(650, 780);
+    final private Dimension selPanelDim = new Dimension(310, 240);
+    final private Dimension myProPanelDim = new Dimension(310, 240);
     final private Dimension wtListPanelDim = new Dimension(622, 500);
 
 
@@ -115,6 +115,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         selSubScrollPane.getViewport().setView(subSelectorList);
 
         // Switch sub selections based on the main selection
+        // Also turn page chooser on/off based on the main selection
         mainSelectorList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent le) {
@@ -122,14 +123,20 @@ public class NaverCrawlerGUI implements NaverConstants {
                 ).getValue()) {
                     case "webtoon":
                         subSelectorList.setListData(WEBTOON_CAT.toArray());
+                        pageLabel.setEnabled(false);
+                        pageNumSpinner.setEnabled(false);
                         break;
 
                     case "best":
                         subSelectorList.setListData(BEST_CAT.toArray());
+                        pageLabel.setEnabled(true);
+                        pageNumSpinner.setEnabled(true);
                         break;
 
                     case "challenge":
                         subSelectorList.setListData(CHALLENGE_CAT);
+                        pageLabel.setEnabled(true);
+                        pageNumSpinner.setEnabled(true);
                         break;
                 }
             }
@@ -138,11 +145,22 @@ public class NaverCrawlerGUI implements NaverConstants {
         // Create a number field to choose a page.
         // Page number starts at 1, and increments by 1.
         SpinnerNumberModel model =
-                new SpinnerNumberModel(1,1,1,1);
+                new SpinnerNumberModel(1, 1, 1, 1);
         // We don't know the last page number, so set it to max.
         model.setMaximum(Integer.MAX_VALUE);
         pageNumSpinner = new JSpinner(model);
-        pageNumSpinner.setPreferredSize(new Dimension(200, 20));
+        pageNumSpinner.setPreferredSize(new Dimension(50, 20));
+        pageNumSpinner.setEnabled(false);
+
+        // Create a label for the page number field.
+        pageLabel = new JLabel("페이지 번호 :");
+        pageLabel.setEnabled(false);
+        pageLabel.setPreferredSize(new Dimension(150, 20));
+        pageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        // Create a dummy label to fill empty space
+        JLabel dummyLabel = new JLabel();
+        dummyLabel.setPreferredSize(new Dimension(90, 20));
 
         // Add a button that user can click to download stuff.
         getListBtn = new JButton("웹툰 목록 가져오기~");
@@ -181,7 +199,9 @@ public class NaverCrawlerGUI implements NaverConstants {
         selectionPanel.add(subLabel);
         selectionPanel.add(mainSelectorList);
         selectionPanel.add(selSubScrollPane);
+        selectionPanel.add(pageLabel);
         selectionPanel.add(pageNumSpinner);
+        selectionPanel.add(dummyLabel);
         selectionPanel.add(chseDirBtn);
         selectionPanel.add(getListBtn);
         selectionPanel.add(savePathScrollPane);
