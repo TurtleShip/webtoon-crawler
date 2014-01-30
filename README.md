@@ -1,17 +1,22 @@
 # Webtoon Crawler
-The crawler that downloads Naver and Daum webtoons.
+*The crawler that downloads Naver, Daum, and NateOn webtoons.*
 
 ## Overview
-This is a webtoon crawler.
+This project is under development.
 
-It is under development.
+Currently, it only provides Naver webtoon downloading service.
 
-My goal is to write a program with GUI that can download webtoons.
+The program looks like this.
+![Naver Crawler](images/roller_coaster.png)
 
-The end product should be intuitive enough that even hoteliers can use it!
+## How to run this program
+1. Download [jar file](WebtoonCrawler.jar)
 
+### Windows
+Double click the far file.
 
-Developed by [Seulgi Kim](https://github.com/TurtleShip)
+### Mac, Linux
+Type 'java -jar WebtoonCrawler.jar' from the console.
 
 ## Credit
 Inspired by a project [web_crawler](https://github.com/emeraldsnail/webtoon_crawler) developed by a **_great man_** [Jonghwi Lee](https://github.com/emeraldsnail).

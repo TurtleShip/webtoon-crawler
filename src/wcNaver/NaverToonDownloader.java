@@ -46,7 +46,6 @@ public class NaverToonDownloader implements Runnable {
     }
 
     public synchronized void shutdown() {
-        pw.println("Shutdown!");
         shutdown = true;
         pause = false;
         notify();
