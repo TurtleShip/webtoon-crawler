@@ -4,6 +4,8 @@ import theCrawler.LabelValueTuple;
 import wcNaver.webtoon.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,6 +103,27 @@ public class NaverCrawlerGUI implements NaverConstants {
         subSelectorList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         subSelectorList.setSelectedIndex(0);
         selSubScrollPane.getViewport().setView(subSelectorList);
+
+        // Switch sub selections based on the main selection
+        mainSelectorList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent le) {
+                switch (((LabelValueTuple<String>) mainSelectorList.getSelectedValue()
+                ).getValue()) {
+                    case "webtoon":
+                        subSelectorList.setListData(WEBTOON_CAT.toArray());
+                        break;
+
+                    case "best":
+                        subSelectorList.setListData(BEST_CAT);
+                        break;
+
+                    case "challenge":
+                        subSelectorList.setListData(CHALLENGE_CAT.toArray());
+                        break;
+                }
+            }
+        });
 
 
         // Add a button that user can click to download stuff.

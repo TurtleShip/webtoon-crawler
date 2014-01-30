@@ -16,8 +16,8 @@ public interface NaverConstants {
     public static final List<LabelValueTuple<String>> MAIN_CAT =
         new ArrayList<LabelValueTuple<String>>() {{
             add(new LabelValueTuple<>("웹툰", "webtoon"));
-//            add(new LabelValueTuple<>("베스트 도전", "best"));
-//            add(new LabelValueTuple<>("도전만화", "challenge"));
+            add(new LabelValueTuple<>("베스트 도전", "best"));
+            add(new LabelValueTuple<>("도전만화", "challenge"));
         }};
 
     public static final List<LabelValueTuple<Day>> WEBTOON_CAT =
