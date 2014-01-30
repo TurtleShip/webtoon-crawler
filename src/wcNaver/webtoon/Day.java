@@ -6,7 +6,7 @@ public enum Day {
 
     private String day;
 
-    Day(String day) {
+    private Day(String day) {
         this.day = day;
     }
 
