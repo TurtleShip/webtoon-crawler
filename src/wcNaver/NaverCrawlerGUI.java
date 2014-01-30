@@ -33,6 +33,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     private JLabel mainLabel;
     private JLabel subLabel;
+    private JLabel pageLabel;
     private JLabel wtListLabel;
     private JLabel saveDirMsgLabel;
     private JLabel saveDirLabel;
@@ -48,6 +49,13 @@ public class NaverCrawlerGUI implements NaverConstants {
 
     private JProgressBar tmpProgBar;
 
+    private JSpinner pageNumSpinner;
+
+    final private Dimension mainDim = new Dimension(650, 760);
+    final private Dimension selPanelDim = new Dimension(310, 220);
+    final private Dimension myProPanelDim = new Dimension(310, 220);
+    final private Dimension wtListPanelDim = new Dimension(622, 500);
+
 
     public NaverCrawlerGUI() {
 
@@ -60,12 +68,12 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         JFrame jfrm = new JFrame("네이버 크롤러");
         jfrm.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        jfrm.setSize(650, 760);
+        jfrm.setSize(mainDim);
         jfrm.setResizable(false); // Make it not resizable for now.
         jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setupSelectionPane();
-        setupProgressPanel();
+        setupSelectionPanel();
+        setupMyProfilePanel();
         setupWtListScrollPane();
         setupGetListBtn(); // Set up "웹툰 목록 가져오기~" button
 
@@ -77,12 +85,12 @@ public class NaverCrawlerGUI implements NaverConstants {
         jfrm.setVisible(true);
     }
 
-    private void setupSelectionPane() {
+    private void setupSelectionPanel() {
         // Create a selection panel where users will select cartoons
         selectionPanel = new JPanel();
         selectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
         selectionPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        selectionPanel.setPreferredSize(new Dimension(310, 220));
+        selectionPanel.setPreferredSize(selPanelDim);
 
         // Create the main selector with a label
         mainLabel = new JLabel("메인 카테고리");
@@ -127,6 +135,14 @@ public class NaverCrawlerGUI implements NaverConstants {
             }
         });
 
+        // Create a number field to choose a page.
+        // Page number starts at 1, and increments by 1.
+        SpinnerNumberModel model =
+                new SpinnerNumberModel(1,1,1,1);
+        // We don't know the last page number, so set it to max.
+        model.setMaximum(Integer.MAX_VALUE);
+        pageNumSpinner = new JSpinner(model);
+        pageNumSpinner.setPreferredSize(new Dimension(200, 20));
 
         // Add a button that user can click to download stuff.
         getListBtn = new JButton("웹툰 목록 가져오기~");
@@ -165,16 +181,17 @@ public class NaverCrawlerGUI implements NaverConstants {
         selectionPanel.add(subLabel);
         selectionPanel.add(mainSelectorList);
         selectionPanel.add(selSubScrollPane);
+        selectionPanel.add(pageNumSpinner);
         selectionPanel.add(chseDirBtn);
         selectionPanel.add(getListBtn);
         selectionPanel.add(savePathScrollPane);
     }
 
-    private void setupProgressPanel() {
+    private void setupMyProfilePanel() {
         // Create a progress panel.
         myProfilePanel = new JPanel();
         myProfilePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
-        myProfilePanel.setPreferredSize(new Dimension(310, 220));
+        myProfilePanel.setPreferredSize(myProPanelDim);
         myProfilePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
     }
 
@@ -184,7 +201,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.setLayout(new BoxLayout(wtListPanel, BoxLayout.Y_AXIS));
 
         wtListScrollPane = new JScrollPane();
-        wtListScrollPane.setPreferredSize(new Dimension(622, 500));
+        wtListScrollPane.setPreferredSize(wtListPanelDim);
         wtListScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         // Create components for the webtoon list panel.
