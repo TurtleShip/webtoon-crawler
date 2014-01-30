@@ -1,6 +1,8 @@
 package wcNaver;
 
 import theCrawler.LabelValueTuple;
+import wcNaver.bestChallenge.Genre;
+import wcNaver.bestChallenge.NaverBCCrawler;
 import wcNaver.webtoon.*;
 
 import javax.swing.*;
@@ -65,6 +67,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         setupSelectionPane();
         setupProgressPanel();
         setupWtListScrollPane();
+        setupGetListBtn(); // Set up "웹툰 목록 가져오기~" button
 
         // Add the selectionPanel to the main frame.
         jfrm.add(selectionPanel);
@@ -114,11 +117,11 @@ public class NaverCrawlerGUI implements NaverConstants {
                         break;
 
                     case "best":
-                        subSelectorList.setListData(BEST_CAT);
+                        subSelectorList.setListData(BEST_CAT.toArray());
                         break;
 
                     case "challenge":
-                        subSelectorList.setListData(CHALLENGE_CAT.toArray());
+                        subSelectorList.setListData(CHALLENGE_CAT);
                         break;
                 }
             }
@@ -193,9 +196,6 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListLabel = new JLabel(howto);
         wtListPanel.add(wtListLabel);
         wtListScrollPane.getViewport().setView(wtListPanel);
-
-        // Set up "웹툰 목록 가져오기~" button
-        setupGetListBtn();
     }
 
     private void setupGetListBtn() {
@@ -211,12 +211,6 @@ public class NaverCrawlerGUI implements NaverConstants {
                         ((LabelValueTuple<String>) mainSelectorList.getSelectedValue())
                                 .getValue();
 
-                wcNaver.webtoon.Day subCat =
-                        ((LabelValueTuple<wcNaver.webtoon.Day>) subSelectorList.getSelectedValue())
-                                .getValue();
-                wtListLabel.setText("Current selection : " + mainCat + " - "
-                        + subCat);
-
                 // Clear list panel
                 wtListPanel.removeAll();
 
@@ -229,23 +223,32 @@ public class NaverCrawlerGUI implements NaverConstants {
 
                 switch (mainCat) {
                     case "webtoon":
-                        final Day tmpD = subCat;
+                        final Day day =
+                                ((LabelValueTuple<Day>) subSelectorList.getSelectedValue())
+                                        .getValue();
 
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                getWebtoonList(tmpD);
+                                getWebtoonList(day);
                             }
                         }).start();
-//                        getWebtoonList(subCat);
                         break;
 
                     case "best":
-                        wtListLabel.setText("베스트 도전 아직 안되요.");
+                        final Genre genre =
+                                ((LabelValueTuple<Genre>) subSelectorList.getSelectedValue())
+                                        .getValue();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getBestChallengeList(genre);
+                            }
+                        }).start();
                         break;
 
                     case "challenge":
-                        wtListLabel.setText("도전 만화 아직 안되요.");
+
                         break;
 
                     default:
@@ -258,7 +261,21 @@ public class NaverCrawlerGUI implements NaverConstants {
     public void getWebtoonList(Day day) {
         NaverToonInfo[] infos
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
+        populateNaverToon(infos);
+    }
 
+    public void getBestChallengeList(Genre genre) {
+        System.out.println("Gettting list");
+        NaverToonInfo[] infos
+                = NaverBCCrawler.downloadBCListByGenre(genre, 1);
+        populateNaverToon(infos);
+    }
+
+    public void getChallengeList() {
+
+    }
+
+    private void populateNaverToon(NaverToonInfo[] infos) {
         wtListPanel.removeAll();
         // Now display the information
         for (NaverToonInfo info : infos) {
@@ -372,14 +389,6 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.revalidate();
         wtListPanel.repaint();
         getListBtn.setEnabled(true);
-    }
-
-    public void getBestChallengeList() {
-
-    }
-
-    public void getChallengeList() {
-
     }
 
 

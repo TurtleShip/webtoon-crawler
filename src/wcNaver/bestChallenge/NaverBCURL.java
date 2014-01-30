@@ -2,6 +2,8 @@ package wcNaver.bestChallenge;
 
 import wcNaver.NaverURL;
 
+import java.util.regex.Pattern;
+
 /**
  * Contains url for Naver best challenge webtoons.
  */
@@ -16,12 +18,14 @@ public class NaverBCURL {
     public static final String BC_DETAIL_BASE =
             NaverURL.BASE_URL + "/bestChallenge/detail.nhn?";
 
-    // 전체 : http://comic.naver.com/genre/bestChallenge.nhn?=
-    // 장르 : http://comic.naver.com/genre/bestChallenge.nhn?m=omnibus
+    public static final Pattern titleIdPat
+            = Pattern.compile("titleId=(\\d*)");
 
-    // 리스트 : http://comic.naver.com/bestChallenge/list.nhn?titleId=552954
+    public static final Pattern noPat = Pattern.compile("no=(\\d*)");
 
-    // 만화 : http://comic.naver.com/bestChallenge/detail.nhn?titleId=552954&no=35
+    public static String getGenreListURL(final Genre genre, int pageNum) {
+        return BC_GENRE_BASE + genre.getGenre() + "&page=" + pageNum;
+    }
 
     public static String getBCListURL(final String titleId) {
         return BC_LIST_BASE + titleId;

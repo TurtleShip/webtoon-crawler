@@ -33,10 +33,10 @@ public interface NaverConstants {
             }};
 
 
-    public static final String[] BEST_CAT =
+    public static final String[] CHALLENGE_CAT =
             {"아직 준비 안 됬어요~"};
 
-    public static final List<LabelValueTuple<Genre>> CHALLENGE_CAT =
+    public static final List<LabelValueTuple<Genre>> BEST_CAT =
             new ArrayList<LabelValueTuple<Genre>>() {{
                 add(new LabelValueTuple<>("에피소드", Genre.EPISODE));
                 add(new LabelValueTuple<>("옴니버스", Genre.OMNIBUS));

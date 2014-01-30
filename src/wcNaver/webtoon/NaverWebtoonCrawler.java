@@ -32,7 +32,7 @@ public class NaverWebtoonCrawler {
     public static NaverToonInfo[] downloadWebtoonListByDay(Day day) {
         // Create necessary references
         NaverToonInfo[] info;
-        String href, titleId, url = "";
+        String href, url = "", thumbURL;
         Document doc;
         Element content, img, link;
         Elements imgList;
@@ -63,7 +63,7 @@ public class NaverWebtoonCrawler {
                     .getElementsByTag("a").first();
             href = link.attr("href");
 
-            String thumbURL = link.child(0).absUrl("src");
+            thumbURL = link.child(0).absUrl("src");
             // Use Regex to pull title id from the href link
             mat = NaverWebtoonURL.titleIdPat.matcher(href);
             mat.find();

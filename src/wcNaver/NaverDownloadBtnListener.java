@@ -1,7 +1,5 @@
 package wcNaver;
 
-import wcNaver.webtoon.NaverWebtoonDownloader;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,12 +7,12 @@ import java.nio.file.Paths;
 
 /**
  * This class provides ActionListener to download-related buttons.
- * I created this class to share NaverWebtoonDownloader downloader
+ * I created this class to share NaverToonDownloader downloader
  * among the buttons.
  */
 public class NaverDownloadBtnListener implements ActionListener {
 
-    private NaverWebtoonDownloader downloader;
+    private NaverToonDownloader downloader;
     private NaverToonInfo info;
 
     private JLabel saveDirLabel;
@@ -59,7 +57,7 @@ public class NaverDownloadBtnListener implements ActionListener {
                     return;
                 }
                 downloader
-                        = new NaverWebtoonDownloader(info, totalProg, partialProg);
+                        = new NaverToonDownloader(info, totalProg, partialProg);
                 downloader.setSaveDir(Paths.get(saveDirLabel.getText()));
 
                 // Adjust buttons accordingly

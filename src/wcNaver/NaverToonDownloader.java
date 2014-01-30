@@ -1,9 +1,10 @@
-package wcNaver.webtoon;
+package wcNaver;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import wcNaver.NaverToonInfo;
+import wcNaver.webtoon.NaverWebtoonURL;
 
 import javax.swing.*;
 import java.io.FileOutputStream;
@@ -17,7 +18,7 @@ import java.util.regex.Matcher;
  * This class download webtoon, and
  * implements thread.
  */
-public class NaverWebtoonDownloader implements Runnable {
+public class NaverToonDownloader implements Runnable {
 
     private boolean shutdown = false;
     private boolean pause = false;
@@ -28,9 +29,9 @@ public class NaverWebtoonDownloader implements Runnable {
     private Thread thread;
     private Path saveDir;
 
-    public NaverWebtoonDownloader(NaverToonInfo info,
-                                  JProgressBar totalProg,
-                                  JProgressBar partialProg) {
+    public NaverToonDownloader(NaverToonInfo info,
+                               JProgressBar totalProg,
+                               JProgressBar partialProg) {
         this.info = info;
         this.totalProg = totalProg;
         this.partialProg = partialProg;
