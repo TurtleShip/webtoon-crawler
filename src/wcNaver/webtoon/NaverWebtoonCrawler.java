@@ -1,23 +1,17 @@
 package wcNaver.webtoon;
 
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import wcNaver.NaverToonInfo;
 
 import javax.swing.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -35,9 +29,9 @@ public class NaverWebtoonCrawler {
      * @param day the day you want to download webtoon list from
      * @return Available webtoon information for the given day
      */
-    public static NaverWebtoonInfo[] downloadWebtoonListByDay(Day day) {
+    public static NaverToonInfo[] downloadWebtoonListByDay(Day day) {
         // Create necessary references
-        NaverWebtoonInfo[] info;
+        NaverToonInfo[] info;
         String href, titleId, url = "";
         Document doc;
         Element content, img, link;
@@ -60,7 +54,7 @@ public class NaverWebtoonCrawler {
         imgList = content.getElementsByClass("img_list").first().children();
         webtoonTotal = imgList.size();
 
-        info = new NaverWebtoonInfo[webtoonTotal];
+        info = new NaverToonInfo[webtoonTotal];
 
 
         for (int i = 0; i < webtoonTotal; i++) {
@@ -74,7 +68,7 @@ public class NaverWebtoonCrawler {
             mat = NaverWebtoonURL.titleIdPat.matcher(href);
             mat.find();
             try {
-                info[i] = new NaverWebtoonInfo(mat.group(1), link.attr("title"),
+                info[i] = new NaverToonInfo(mat.group(1), link.attr("title"),
                         new ImageIcon(new URL(thumbURL)));
             } catch (MalformedURLException e) {
                 pw.println("Unable to download thumbnail from url " + thumbURL);

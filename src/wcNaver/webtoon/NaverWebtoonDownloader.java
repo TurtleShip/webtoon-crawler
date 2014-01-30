@@ -3,6 +3,7 @@ package wcNaver.webtoon;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import wcNaver.NaverToonInfo;
 
 import javax.swing.*;
 import java.io.FileOutputStream;
@@ -20,14 +21,14 @@ public class NaverWebtoonDownloader implements Runnable {
 
     private boolean shutdown = false;
     private boolean pause = false;
-    private NaverWebtoonInfo info;
+    private NaverToonInfo info;
     private JProgressBar totalProg;
     private JProgressBar partialProg;
     private PrintWriter pw = new PrintWriter(System.out, true);
     private Thread thread;
     private Path saveDir;
 
-    public NaverWebtoonDownloader(NaverWebtoonInfo info,
+    public NaverWebtoonDownloader(NaverToonInfo info,
                                   JProgressBar totalProg,
                                   JProgressBar partialProg) {
         this.info = info;

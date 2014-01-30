@@ -1,7 +1,6 @@
 package wcNaver;
 
 import wcNaver.webtoon.NaverWebtoonDownloader;
-import wcNaver.webtoon.NaverWebtoonInfo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +15,7 @@ import java.nio.file.Paths;
 public class NaverDownloadBtnListener implements ActionListener {
 
     private NaverWebtoonDownloader downloader;
-    private NaverWebtoonInfo info;
+    private NaverToonInfo info;
 
     private JLabel saveDirLabel;
     private JLabel wtMsgLabel;
@@ -30,7 +29,7 @@ public class NaverDownloadBtnListener implements ActionListener {
 
 
     public NaverDownloadBtnListener(
-            NaverWebtoonInfo info,
+            NaverToonInfo info,
             JProgressBar totalProg,
             JProgressBar partialProg,
             JLabel saveDirLabel,

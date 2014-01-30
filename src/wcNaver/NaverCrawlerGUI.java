@@ -9,7 +9,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Paths;
 
 
 /**
@@ -257,12 +256,12 @@ public class NaverCrawlerGUI implements NaverConstants {
     }
 
     public void getWebtoonList(Day day) {
-        NaverWebtoonInfo[] infos
+        NaverToonInfo[] infos
                 = NaverWebtoonCrawler.downloadWebtoonListByDay(day);
 
         wtListPanel.removeAll();
         // Now display the information
-        for (NaverWebtoonInfo info : infos) {
+        for (NaverToonInfo info : infos) {
             // A panel to hold a webtoon info
             JPanel curWtPanel = new JPanel();
             curWtPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 2));
