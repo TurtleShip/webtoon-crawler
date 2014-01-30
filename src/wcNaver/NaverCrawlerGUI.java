@@ -139,6 +139,7 @@ public class NaverCrawlerGUI implements NaverConstants {
                         pageNumSpinner.setEnabled(true);
                         break;
                 }
+                subSelectorList.setSelectedIndex(0);
             }
         });
 
@@ -279,9 +280,11 @@ public class NaverCrawlerGUI implements NaverConstants {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                getBestChallengeList(genre);
+                                getBestChallengeList(genre,
+                                        (Integer) pageNumSpinner.getValue());
                             }
                         }).start();
+
                         break;
 
                     case "challenge":
@@ -301,10 +304,10 @@ public class NaverCrawlerGUI implements NaverConstants {
         populateNaverToon(infos);
     }
 
-    public void getBestChallengeList(Genre genre) {
+    public void getBestChallengeList(Genre genre, int pageNum) {
         System.out.println("Gettting list");
         NaverToonInfo[] infos
-                = NaverBCCrawler.downloadBCListByGenre(genre, 1);
+                = NaverBCCrawler.downloadBCListByGenre(genre, pageNum);
         populateNaverToon(infos);
     }
 
@@ -426,6 +429,15 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.revalidate();
         wtListPanel.repaint();
         getListBtn.setEnabled(true);
+    }
+
+    private void displayWarning(String msg) {
+        wtListPanel.removeAll();
+        JLabel warning = new JLabel("<html><h1><font color='red>" + msg
+                + "</font></h1></html>");
+        wtListPanel.add(warning);
+        wtListPanel.revalidate();
+        wtListPanel.repaint();
     }
 
 
