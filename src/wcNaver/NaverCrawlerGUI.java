@@ -70,7 +70,7 @@ public class NaverCrawlerGUI implements NaverConstants {
             e.printStackTrace();
         }
 
-        JFrame jfrm = new JFrame("네이버 크롤러");
+        JFrame jfrm = new JFrame("네이버 크롤러 alpha");
         jfrm.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
         jfrm.setSize(mainDim);
         jfrm.setResizable(false); // Make it not resizable for now.
@@ -196,7 +196,7 @@ public class NaverCrawlerGUI implements NaverConstants {
                     // Check if the user didn't make a mistake
                     Path chosenPath
                             = Paths.get(saveDirChsr.getSelectedFile().getAbsolutePath());
-                    if(!Files.exists(chosenPath)) {
+                    if (!Files.exists(chosenPath)) {
                         saveDirMsgLabel.setText(chosenPath +
                                 "는 존재하지않는 경로 입니다. :-p");
                         saveDirLabel.setText("");
@@ -226,9 +226,26 @@ public class NaverCrawlerGUI implements NaverConstants {
     private void setupMyProfilePanel() {
         // Create a progress panel.
         myProfilePanel = new JPanel();
-        myProfilePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+        myProfilePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 2));
         myProfilePanel.setPreferredSize(myProPanelDim);
         myProfilePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        ImageIcon myFaceImg = new ImageIcon("images/roller_coaster.png");
+        JLabel myFace = new JLabel("", myFaceImg, SwingConstants.LEFT);
+
+        String msg = "\n개발자: 김슬기\n\n" +
+                "연락처 : https://www.facebook.com/seulgi.kim\n\n" +
+                "프로필 : www.linkedin.com/in/seulgi/\n\n" +
+                "소스코드 : https://github.com/TurtleShip/WebtoonCrawler\n\n";
+        JTextArea myInfo = new JTextArea(msg);
+        myInfo.setBackground(Color.getHSBColor(0.2f, 0.1f, 0.8f));
+
+        myInfo.setLineWrap(true);
+        myInfo.setEditable(false);
+        myInfo.setPreferredSize(new Dimension(130, 210));
+
+        myProfilePanel.add(myFace);
+        myProfilePanel.add(myInfo);
     }
 
     private void setupWtListScrollPane() {
