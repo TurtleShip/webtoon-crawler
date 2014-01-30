@@ -2,6 +2,7 @@ package wcNaver;
 
 
 import theCrawler.LabelValueTuple;
+import wcNaver.bestChallenge.Genre;
 import wcNaver.webtoon.Day;
 
 import java.util.ArrayList;
@@ -34,7 +35,24 @@ public interface NaverConstants {
 
     public static final String[] BEST_CAT =
             {"아직 준비 안 됬어요~"};
-    public static final String[] CHALLENGE_CAT =
-            {"만드는 중입니다. 기둘려 주세요. :-)"};
+
+    public static final List<LabelValueTuple<Genre>> CHALLENGE_CAT =
+            new ArrayList<LabelValueTuple<Genre>>() {{
+                add(new LabelValueTuple<>("에피소드", Genre.EPISODE));
+                add(new LabelValueTuple<>("옴니버스", Genre.OMNIBUS));
+                add(new LabelValueTuple<>("스토리", Genre.STORY));
+                add(new LabelValueTuple<>("일상", Genre.DAILY));
+                add(new LabelValueTuple<>("개그", Genre.COMIC));
+                add(new LabelValueTuple<>("판타지", Genre.FANTASY));
+                add(new LabelValueTuple<>("액션", Genre.ACTION));
+                add(new LabelValueTuple<>("드라마", Genre.DRAMA));
+                add(new LabelValueTuple<>("순정", Genre.PURE));
+                add(new LabelValueTuple<>("감성", Genre.SENSIBILITY));
+                add(new LabelValueTuple<>("스릴러", Genre.THRILL));
+                add(new LabelValueTuple<>("시대극", Genre.HISTORICAL));
+                add(new LabelValueTuple<>("스포츠", Genre.SPORTS));
+                add(new LabelValueTuple<>("전체만화", Genre.ALL));
+            }};
+
 
 }
