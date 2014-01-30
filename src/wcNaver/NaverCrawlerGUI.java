@@ -12,6 +12,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -189,9 +192,20 @@ public class NaverCrawlerGUI implements NaverConstants {
             public void actionPerformed(ActionEvent ae) {
                 if (saveDirChsr.showOpenDialog(selectionPanel)
                         == JFileChooser.APPROVE_OPTION) {
-                    saveDirMsgLabel.setText("저장경로 : ");
-                    saveDirLabel.setText(
-                            saveDirChsr.getSelectedFile().getAbsolutePath());
+
+                    // Check if the user didn't make a mistake
+                    Path chosenPath
+                            = Paths.get(saveDirChsr.getSelectedFile().getAbsolutePath());
+                    if(!Files.exists(chosenPath)) {
+                        saveDirMsgLabel.setText(chosenPath +
+                                "는 존재하지않는 경로 입니다. :-p");
+                        saveDirLabel.setText("");
+                    } else {
+                        saveDirMsgLabel.setText("저장경로 : ");
+                        saveDirLabel.setText(
+                                saveDirChsr.getSelectedFile().getAbsolutePath());
+                    }
+
                 }
             }
         });
