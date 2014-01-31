@@ -31,6 +31,8 @@ public class NaverToonDownloader implements Runnable {
     private Path saveDir;
     private NaverToonCategory cat;
 
+    final private static String pattern = "[\\/:*?\"<>|]";
+
     public NaverToonDownloader(NaverToonInfo info,
                                JProgressBar totalProg,
                                JProgressBar partialProg) {
@@ -130,7 +132,9 @@ public class NaverToonDownloader implements Runnable {
 
             if (!Files.exists(base)) Files.createDirectory(base);
 
-            wtDir = base.resolve(info.getTitleName()); // create the webtoon directory
+            wtDir = base.resolve(
+                    getValidName(info.getTitleName())
+            ); // create the webtoon directory
             if (!Files.exists(wtDir)) Files.createDirectory(wtDir);
 
         } catch (IOException ioe) {
@@ -142,9 +146,9 @@ public class NaverToonDownloader implements Runnable {
             // display the total progress
             totalProg.setValue((int) (totalInc * (curSeries - 1)));
 
-            if(cat ==  NaverToonCategory.WEBTOON) {
+            if (cat == NaverToonCategory.WEBTOON) {
                 wtURL = NaverWebtoonURL.getWebtoonDetailURL(info.getTitleId(), curSeries);
-            } else if(cat == NaverToonCategory.BEST) {
+            } else if (cat == NaverToonCategory.BEST) {
                 wtURL = NaverBCURL.getBCDetailURL(info.getTitleId(), curSeries);
             } else {
                 wtURL = NaverCHURL.getChDetailURL(info.getTitleId(), curSeries);
@@ -156,7 +160,9 @@ public class NaverToonDownloader implements Runnable {
                 wtSeriesName = wtPage.getElementsByClass("tit_area").first()
                         .getElementsByClass("view").first()
                         .getElementsByTag("h3").first().ownText();
-                wtSeriesDir = wtDir.resolve(wtSeriesName);
+                wtSeriesDir = wtDir.resolve(
+                        getValidName(wtSeriesName)
+                );
 
 
                 // If the folder exist, I assume that the contents have been
@@ -242,6 +248,10 @@ public class NaverToonDownloader implements Runnable {
         }
 
 
+    }
+
+    private String getValidName(String name) {
+        return name.replaceAll(pattern, "");
     }
 
 }
