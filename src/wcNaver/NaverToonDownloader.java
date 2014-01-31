@@ -133,7 +133,7 @@ public class NaverToonDownloader implements Runnable {
             if (!Files.exists(base)) Files.createDirectory(base);
 
             wtDir = base.resolve(
-                    getValidName(info.getTitleName())
+                    getValidName(info.getTitleName(), info.getTitleId())
             ); // create the webtoon directory
             if (!Files.exists(wtDir)) Files.createDirectory(wtDir);
 
@@ -161,7 +161,7 @@ public class NaverToonDownloader implements Runnable {
                         .getElementsByClass("view").first()
                         .getElementsByTag("h3").first().ownText();
                 wtSeriesDir = wtDir.resolve(
-                        getValidName(wtSeriesName)
+                        getValidName(wtSeriesName, Integer.toString(curSeries))
                 );
 
 
@@ -250,8 +250,10 @@ public class NaverToonDownloader implements Runnable {
 
     }
 
-    private String getValidName(String name) {
-        return name.replaceAll(pattern, "");
+    private String getValidName(String name, String titleId) {
+        String validName = name.replaceAll(pattern, "");
+        if (validName.length() == 0) return "이름강제변환_" + titleId;
+        return validName;
     }
 
 }
