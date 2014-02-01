@@ -18,5 +18,5 @@ The program looks as below.
 - Mac, Linux : Type 'java -jar WebtoonCrawler.jar' from the console.
 
 ## Credit
-Inspired by a project [web_crawler](https://github.com/emeraldsnail/webtoon_crawler) developed by a **_great man_** [Jonghwi Lee](https://github.com/emeraldsnail).
+Inspired by a project [web_crawler](https://github.com/emeraldsnail/webtoon_crawler) developed by [**emeraldsnail**](https://github.com/emeraldsnail).
 
