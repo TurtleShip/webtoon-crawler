@@ -168,7 +168,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         dummyLabel.setPreferredSize(new Dimension(90, 20));
 
         // Add a button that user can click to download stuff.
-        getListBtn = new JButton("웹툰 목록 가져오기~");
+        getListBtn = new JButton("웹툰 목록 가져오기");
         getListBtn.setPreferredSize(new Dimension(150, 20));
 
         saveDirChsr = new JFileChooser();
@@ -230,7 +230,9 @@ public class NaverCrawlerGUI implements NaverConstants {
         myProfilePanel.setPreferredSize(myProPanelDim);
         myProfilePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
-        ImageIcon myFaceImg = new ImageIcon("images/roller_coaster.png");
+        ImageIcon myFaceImg = new ImageIcon(
+                getClass().getResource("/images/roller_coaster.png"));
+
         JLabel myFace = new JLabel("", myFaceImg, SwingConstants.LEFT);
 
         String msg = "\n개발자: 김슬기\n\n" +
@@ -246,6 +248,7 @@ public class NaverCrawlerGUI implements NaverConstants {
 
         myProfilePanel.add(myFace);
         myProfilePanel.add(myInfo);
+
     }
 
     private void setupWtListScrollPane() {
