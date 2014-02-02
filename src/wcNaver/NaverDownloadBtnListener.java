@@ -57,15 +57,14 @@ public class NaverDownloadBtnListener implements ActionListener {
                     return;
                 }
                 downloader
-                        = new NaverToonDownloader(info, totalProg, partialProg);
+                        = new NaverToonDownloader(
+                        info, totalProg, partialProg, wtMsgLabel);
                 downloader.setSaveDir(Paths.get(saveDirLabel.getText()));
 
                 // Adjust buttons accordingly
                 wtDownload.setEnabled(false);
                 wtPause.setEnabled(true);
                 wtCancel.setEnabled(true);
-
-                wtMsgLabel.setText("저장 위치: " + saveDirLabel.getText());
 
                 // Start the download
                 downloader.start();

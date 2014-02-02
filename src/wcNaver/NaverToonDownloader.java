@@ -30,16 +30,19 @@ public class NaverToonDownloader implements Runnable {
     private Thread thread;
     private Path saveDir;
     private NaverToonCategory cat;
+    private JLabel wtMsgLabel; // displays where Toons are saved
 
     final private static String pattern = "[\\/:*?\"<>|]";
 
     public NaverToonDownloader(NaverToonInfo info,
                                JProgressBar totalProg,
-                               JProgressBar partialProg) {
+                               JProgressBar partialProg,
+                               JLabel saveDirLabel) {
         this.info = info;
         this.totalProg = totalProg;
         this.partialProg = partialProg;
         this.cat = info.getCategory();
+        this.wtMsgLabel = saveDirLabel;
         thread = new Thread(this);
     }
 
@@ -136,6 +139,9 @@ public class NaverToonDownloader implements Runnable {
                     getValidName(info.getTitleName(), info.getTitleId())
             ); // create the webtoon directory
             if (!Files.exists(wtDir)) Files.createDirectory(wtDir);
+
+            // Display where the webtoon is saved
+            wtMsgLabel.setText("저장위치: " + wtDir.toAbsolutePath());
 
         } catch (IOException ioe) {
             ioe.printStackTrace();

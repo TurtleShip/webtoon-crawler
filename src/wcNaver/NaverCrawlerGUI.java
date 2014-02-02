@@ -361,6 +361,7 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.removeAll();
         // Now display the information
         for (NaverToonInfo info : infos) {
+
             // A panel to hold a webtoon info
             JPanel curWtPanel = new JPanel();
             curWtPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 2));
@@ -409,6 +410,11 @@ public class NaverCrawlerGUI implements NaverConstants {
             JLabel totalProgLabel = new JLabel("전체 :");
             JLabel partialProgLabel = new JLabel("현재 :");
 
+            // Create a scroll pane to hold the wtMsgLabel
+            JScrollPane wtMsgSP = new JScrollPane();
+            wtMsgSP.setPreferredSize(new Dimension(260, 40));
+            wtMsgSP.getViewport().setView(wtMsgLabel);
+
             // Set labels' sizes appropriately
             totalProgLabel.setPreferredSize(new Dimension(50, 20));
             partialProgLabel.setPreferredSize(new Dimension(50, 20));
@@ -456,7 +462,7 @@ public class NaverCrawlerGUI implements NaverConstants {
             btnPanel.add(wtCancel);
 
             // Add the progress msg and bars to their panel
-            progInfoPanel.add(wtMsgLabel);
+            progInfoPanel.add(wtMsgSP);
             progInfoPanel.add(totalProgPanel);
             progInfoPanel.add(partialProgPanel);
 
