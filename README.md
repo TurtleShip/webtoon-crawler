@@ -14,7 +14,7 @@ The program looks as below.
 ![Naver Crawler](images/naver_crawler.png)
 
 ## Version Log
-### v1.0
+### [v1.0](https://github.com/TurtleShip/WebtoonCrawler/tree/v1.0)
 - Supports webtoon downloads from Naver.
 
 ## How to run this program
