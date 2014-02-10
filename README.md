@@ -27,7 +27,7 @@ The program looks as below.
 
 2. Do one of the below depending on your OS
    - Windows : Double click the far file.
-   - Mac, Linux : Type 'java -jar webtoon-crawler.jar' from the console.
+   - Mac, Linux : Type ```java -jar webtoon-crawler.jar``` from the console.
 
 ## How to compile on your own
 Run the below commands from your terminal/console
