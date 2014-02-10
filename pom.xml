@@ -8,14 +8,19 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>webtoon-crawler</name>
+    <developers>
+        <developer>
+            <name>Seulgi Kim</name>
+            <email>seulgi.kim.56@outlook.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
-        <finalName>WebtoonCrawler</finalName>
+        <finalName>webtoon-crawler</finalName>
         <plugins>
             <!-- Use Java 7 -->
             <plugin>
