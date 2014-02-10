@@ -11,7 +11,7 @@ The program looks as below.
 ![Naver Crawler](images/naver_crawler.png)
 
 ## How to run this program
-1. Download [jar file](WebtoonCrawler.jar)
+1. Download [jar file](https://github.com/TurtleShip/WebtoonCrawler/raw/master/WebtoonCrawler.jar)
 
 2.
 - Windows : Double click the far file.
