@@ -10,5 +10,3 @@ src/META-INF/
 # Ignore compiled class files
 *.class
 
-# Ignore notes
-*.txt
