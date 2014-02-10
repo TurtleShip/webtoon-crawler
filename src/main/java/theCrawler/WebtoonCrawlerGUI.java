@@ -241,7 +241,7 @@ public class WebtoonCrawlerGUI implements NaverConstants {
         String msg = "\n개발자: 김슬기\n\n" +
                 "연락처 : https://www.facebook.com/seulgi.kim\n\n" +
                 "프로필 : www.linkedin.com/in/seulgi/\n\n" +
-                "소스코드 : https://github.com/TurtleShip/WebtoonCrawler\n\n";
+                "소스코드 : https://github.com/TurtleShip/webtoon-crawler\n\n";
         JTextArea myInfo = new JTextArea(msg);
         myInfo.setBackground(Color.getHSBColor(0.2f, 0.1f, 0.8f));
 
