@@ -1,6 +1,9 @@
-package wcNaver;
+package theCrawler;
 
 import theCrawler.LabelValueTuple;
+import wcNaver.NaverConstants;
+import wcNaver.NaverDownloadBtnListener;
+import wcNaver.NaverToonInfo;
 import wcNaver.bestChallenge.NaverBCCrawler;
 import wcNaver.challenge.Genre;
 import wcNaver.challenge.NaverCHCrawler;
@@ -20,11 +23,11 @@ import java.nio.file.Paths;
 /**
  * GUI for Naver Crawler.
  * TODO: Implement a method to return JPanel so that
- * TODO: NaverCrawlerGUI can be a part of WebtoonCrawler.
+ * TODO: WebtoonCrawlerGUI can be a part of WebtoonCrawler.
  * TODO: Since the initial beta version will only support
  * TODO: Naver webtoon, the current implementation is okay.
  */
-public class NaverCrawlerGUI implements NaverConstants {
+public class WebtoonCrawlerGUI implements NaverConstants {
 
     private JPanel selectionPanel;
     private JPanel wtListPanel;
@@ -61,7 +64,7 @@ public class NaverCrawlerGUI implements NaverConstants {
     final private Dimension wtListPanelDim = new Dimension(622, 500);
 
 
-    public NaverCrawlerGUI() {
+    public WebtoonCrawlerGUI() {
 
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -488,5 +491,14 @@ public class NaverCrawlerGUI implements NaverConstants {
         wtListPanel.repaint();
     }
 
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new WebtoonCrawlerGUI();
+            }
+        });
+    }
 
 }
