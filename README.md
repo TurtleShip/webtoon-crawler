@@ -11,7 +11,7 @@ since none of them provided Webtoon API***.
 
 The program looks as below.
 
-![Naver Crawler](images/naver_crawler.png)
+![Naver Crawler](src/main/resources/images/naver_crawler.png)
 
 ## Version Log
 ### [v1.0](https://github.com/TurtleShip/WebtoonCrawler/tree/v1.0)

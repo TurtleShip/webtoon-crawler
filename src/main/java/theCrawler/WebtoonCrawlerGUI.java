@@ -1,13 +1,13 @@
 package theCrawler;
 
-import theCrawler.LabelValueTuple;
 import wcNaver.NaverConstants;
 import wcNaver.NaverDownloadBtnListener;
 import wcNaver.NaverToonInfo;
 import wcNaver.bestChallenge.NaverBCCrawler;
 import wcNaver.challenge.Genre;
 import wcNaver.challenge.NaverCHCrawler;
-import wcNaver.webtoon.*;
+import wcNaver.webtoon.Day;
+import wcNaver.webtoon.NaverWebtoonCrawler;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

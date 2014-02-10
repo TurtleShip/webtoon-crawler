@@ -1,9 +1,5 @@
 package wcNaver.webtoon;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,6 +8,10 @@ import wcNaver.NaverToonCategory;
 import wcNaver.NaverToonInfo;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Matcher;
 
 
