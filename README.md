@@ -19,8 +19,12 @@ The program looks as below.
 - [JSoup 1.7.3](http://jsoup.org/)
 
 ## Version Log
+
 ### [v1.0](https://github.com/TurtleShip/webtoon-crawler/tree/v1.0)
 - Supports webtoon downloads from Naver.
+
+### [v1.1](https://github.com/TurtleShip/webtoon-crawler/tree/v1.1)
+- Allow downloading max of 10MB images for Naver webtoon.
 
 ## How to run this program
 1. Download [jar file](https://github.com/TurtleShip/webtoon-crawler/raw/master/webtoon-crawler.jar)
