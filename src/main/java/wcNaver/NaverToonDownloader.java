@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
  */
 public class NaverToonDownloader implements Runnable {
 
+    private static final int MAX_DOWNLOAD_SIZE_BYTES = 1024 * 1024 * 10; // 10MB
     private boolean shutdown = false;
     private boolean pause = false;
     private NaverToonInfo info;
@@ -214,7 +215,9 @@ public class NaverToonDownloader implements Runnable {
                         continue;
 
                     wtRes = Jsoup.connect(imgURL).referrer(wtURL)
-                            .ignoreContentType(true).execute();
+                        .ignoreContentType(true)
+                        .maxBodySize(MAX_DOWNLOAD_SIZE_BYTES)
+                        .execute();
                     wtFileName = "Image_" + (wtCount++) + ".jpg";
                     wtOut = new FileOutputStream(wtSeriesDir.resolve(wtFileName).toFile());
 
