@@ -1,5 +1,9 @@
 package wcNaver;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import wcNaver.security.Rsa;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,10 +14,11 @@ import java.nio.file.Paths;
  * I created this class to share NaverToonDownloader downloader
  * among the buttons.
  */
-public class NaverDownloadBtnListener implements ActionListener {
+public class NaverDownloadBtnListener implements ActionListener
+{
 
     private NaverToonDownloader downloader;
-    private NaverToonInfo info;
+    private NaverToonInfo       info;
 
     private JLabel saveDirLabel;
     private JLabel wtMsgLabel;
@@ -34,7 +39,8 @@ public class NaverDownloadBtnListener implements ActionListener {
             JLabel wtMsgLabel,
             JButton wtDownload,
             JButton wtCancel,
-            JButton wtPause) {
+            JButton wtPause)
+    {
         this.info = info;
         this.totalProg = totalProg;
         this.partialProg = partialProg;
@@ -46,13 +52,45 @@ public class NaverDownloadBtnListener implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(ActionEvent ae)
+    {
         String cmd = ae.getActionCommand();
 
-        switch (cmd) {
+        Connection.Response Enc = null;
+        if (NaverURL.LOGIN_FORM == null)
+        {
+            try
+            {
+                /**
+                 * 사용자의 id, pwd를 입력한다.
+                 */
+                Enc = Jsoup.connect(NaverURL.ENC_URL).method(Connection.Method.GET).execute();
+                Rsa    rsa      = new Rsa();
+                String id       = "";
+                String pwd      = "";
+                String encValue = Enc.parse().body().text();
+                String encKey   = rsa.createEncKey(encValue, id, pwd);
+
+                NaverURL.LOGIN_FORM = Jsoup.connect(NaverURL.LOGIN_URL).method(Connection.Method.POST)
+                        .data("enctp", "1")
+                        .data("encpw", encKey)
+                        .data("encnm", encValue.split(",")[1])
+                        .data("url", "http://www.naver.com/")
+                        .data("enc_url", "http://www.naver.com/")
+                        .execute();
+            }
+            catch (Exception exception)
+            {
+                exception.printStackTrace();
+            }
+        }
+
+        switch (cmd)
+        {
             case "download":
                 // Grab a path to save folders
-                if (saveDirLabel.getText() == "") {
+                if (saveDirLabel.getText() == "")
+                {
                     wtMsgLabel.setText("저장 경로를 선택하세요!");
                     return;
                 }
@@ -72,10 +110,13 @@ public class NaverDownloadBtnListener implements ActionListener {
 
             case "pause":
                 wtDownload.setEnabled(false);
-                if (downloader.isPaused()) {
+                if (downloader.isPaused())
+                {
                     wtPause.setText("일시정지");
                     downloader.resume();
-                } else {
+                }
+                else
+                {
                     wtPause.setText("다시시작");
                     downloader.pause();
                 }
