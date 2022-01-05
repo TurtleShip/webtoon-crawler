@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
 public class NaverCHURL {
 
     public static final String CH_GENRE_BASE =
-            NaverURL.BASE_URL + "/genre/challenge.nhn?m=";
+            NaverURL.BASE_URL + "/genre/challenge?m=";
 
     public static final String CH_LIST_BASE =
-            NaverURL.BASE_URL + "/challenge/list.nhn?titleId=";
+            NaverURL.BASE_URL + "/challenge/list?titleId=";
 
     public static final String CH_DETAIL_BASE =
-            NaverURL.BASE_URL + "/challenge/detail.nhn?";
+            NaverURL.BASE_URL + "/challenge/detail?";
 
     public static final Pattern titleIdPat
             = Pattern.compile("titleId=(\\d*)");

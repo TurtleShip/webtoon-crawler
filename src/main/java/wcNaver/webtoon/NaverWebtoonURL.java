@@ -12,24 +12,24 @@ public class NaverWebtoonURL {
     public static final String WEBTOON_BASE = NaverURL.BASE_URL + "/webtoon";
 
     public static final String WEBTOON_LIST_BASE
-            = WEBTOON_BASE + "/list.nhn?titleId=";
+            = WEBTOON_BASE + "/list?titleId=";
 
     public static final String WEBTOON_DETAIL_BASE
-            = WEBTOON_BASE + "/detail.nhn?";
+            = WEBTOON_BASE + "/detail?";
 
     private static final String WEBTOON_WEEKDAY_BASE
-            = WEBTOON_BASE + "/weekdayList.nhn?week=";
+            = WEBTOON_BASE + "/weekdayList?week=";
 
     /* titleIdPat is used to pull titieId from a href links.
      ex> It is used to pull titleId from
-     /webtoon/list.nhn?titleId=530311&weekday=sat */
+     /webtoon/list?titleId=530311&weekday=sat */
     public static final Pattern titleIdPat
             = Pattern.compile("titleId=(\\d*)");
     public static final Pattern noPat = Pattern.compile("no=(\\d*)");
 
 
     public static String getDayListURL(final Day day) {
-        if(day == Day.ALL) return WEBTOON_BASE + "/finish.nhn";
+        if(day == Day.ALL) return WEBTOON_BASE + "/finish";
         return WEBTOON_WEEKDAY_BASE + day.getDay();
     }
 

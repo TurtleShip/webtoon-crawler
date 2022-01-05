@@ -11,13 +11,13 @@ import java.util.regex.Pattern;
 public class NaverBCURL {
 
     public static final String BC_GENRE_BASE =
-            NaverURL.BASE_URL + "/genre/bestChallenge.nhn?m=";
+            NaverURL.BASE_URL + "/genre/bestChallenge?m=";
 
     public static final String BC_LIST_BASE =
-            NaverURL.BASE_URL + "/bestChallenge/list.nhn?titleId=";
+            NaverURL.BASE_URL + "/bestChallenge/list?titleId=";
 
     public static final String BC_DETAIL_BASE =
-            NaverURL.BASE_URL + "/bestChallenge/detail.nhn?";
+            NaverURL.BASE_URL + "/bestChallenge/detail?";
 
     public static final Pattern titleIdPat
             = Pattern.compile("titleId=(\\d*)");
